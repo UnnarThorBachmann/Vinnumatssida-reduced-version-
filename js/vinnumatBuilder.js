@@ -1540,6 +1540,7 @@ var Afangi = function(param) {
       this.synid = synidaemi.def;
       break;
   }
+  this.actualFjoldi = param[2];
   this.fjoldi = Math.max(param[2],this.synid.lagmark);
   if (this.synid.heiti === 'Starfsbraut (1/3)' || this.synid.heiti === 'Starfsbraut (4/6)' || this.synid.heiti === 'Starfsbraut (7/12)') {
      if (this.fjoldi > this.synid.hamark_e) {
@@ -1547,6 +1548,12 @@ var Afangi = function(param) {
      }
   }
 };
+Afangi.prototype.Fjoldi = function() {
+    return this.actualFjoldi;
+}
+Afangi.prototype.hamark = function() {
+    return this.synid.hamark_n;
+}
 Afangi.prototype.vinnumat = function() {
   if (this.synid.heiti === 'Fjarnám') {
     var kennslustundir = (1 + ((this.einingar * 2)-1)*this.fjoldi/39);
@@ -1703,7 +1710,31 @@ Kennari.prototype.ryra = function() {
 Kennari.prototype.getName = function () {
     return this.heiti;
 }
-
+Kennari.prototype.actualFjoldi = function () {
+    var s = 0;
+    for (var i = 0; i < this.originalAfangar.length; i++) {
+      s+= this.originalAfangar[i].actualFjoldi;
+    }
+    return s;
+}
+Kennari.prototype.alag = function() {
+    console.log(this.originalAfangar);
+    var n = 0;
+    for (var i = 0; i < this.originalAfangar.length; i++) {
+      n += this.originalAfangar.hamark();
+      console.log('prump');
+    }
+    if (n < this.actualFjoldi()) {
+        return true;
+        console.log('a');
+    }
+    else {
+        console.log('b');
+        console.log(n);
+        console.log(this.actualFjoldi());
+        return false;
+    }
+}
 var model = {
     kennari: null,
     kennarar: null,
@@ -1875,8 +1906,6 @@ var octopus = {
     teiknaSynidaemi: function(nafn1,e1,nafn2,e2,fjoldatolur) {
       var gildi1 = [];
       var gildi2 = [];
-      console.log(e1);
-      console.log(e2);
       for (var i = 0; i < fjoldatolur.length; i++) {
         var af1 = new Afangi(new Array('a',e1,fjoldatolur[i],nafn1));
         gildi1.push(af1.vinnumat().toFixed(1));
@@ -1887,6 +1916,19 @@ var octopus = {
         'fyrra': gildi1,
         'seinna': gildi2
       }
+    },
+    alag: function() {
+      var d = {}
+      for (var i = 0; i < model.kennarar.length; i++) {
+       if (model.kennarar[i].alag()) {
+        d[model.kennarar[i].heiti] = "#d3ac2b";
+       }
+       else{
+        d[model.kennarar[i].heiti] = "#fff";
+       }
+      }
+
+      return d
     }
 };
 
@@ -1932,13 +1974,11 @@ var view = {
   },
   init: function () {
     
-    //window.location.href = 'http://www2.fa.is/vinnumat/grafarthogn/';
     var button1 = document.getElementById('add');
       button1.addEventListener('click',function() {
       afangar.fjoldi += 1;
       var afangiCol = document.createElement('div');
       addRow(afangiCol);
-      //uppl.click();
       
     });
     
@@ -2175,10 +2215,16 @@ var view = {
      }
      var ctx = document.getElementById("canvas3").getContext("2d");
      window.adrir = new Chart(ctx).Bar(barChartData, opt);
+     var colors = octopus.alag();
       for (var i = 0; i < window.adrir.datasets[0].bars.length; i++) {
-         if (window.adrir.datasets[0].bars[i].label === 'Þú') {
+         var kennaranafn = window.adrir.datasets[0].bars[i].label;
+         if (kennaranafn === 'Þú') {
            window.adrir.datasets[0].bars[i].fillColor = "#333d51";
          }
+         else {
+            window.adrir.datasets[0].bars[i].fillColor = colors[kennaranafn];
+         }
+
       }
       window.adrir.update();
     document.getElementById('yta').click();
