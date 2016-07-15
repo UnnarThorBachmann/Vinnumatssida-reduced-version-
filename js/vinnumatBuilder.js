@@ -1709,32 +1709,30 @@ Kennari.prototype.ryra = function() {
 };
 Kennari.prototype.getName = function () {
     return this.heiti;
-}
+};
+
 Kennari.prototype.actualFjoldi = function () {
     var s = 0;
+    console.log(this.originalAfangar.length);
     for (var i = 0; i < this.originalAfangar.length; i++) {
-      s+= this.originalAfangar[i].actualFjoldi;
+      s += this.originalAfangar[i].Fjoldi();
+      console.log('prump');
     }
     return s;
-}
+};
 Kennari.prototype.alag = function() {
-    console.log(this.originalAfangar);
     var n = 0;
+    console.log(this.actualFjoldi());
     for (var i = 0; i < this.originalAfangar.length; i++) {
       n += this.originalAfangar.hamark();
-      console.log('prump');
     }
     if (n < this.actualFjoldi()) {
         return true;
-        console.log('a');
     }
     else {
-        console.log('b');
-        console.log(n);
-        console.log(this.actualFjoldi());
         return false;
     }
-}
+};
 var model = {
     kennari: null,
     kennarar: null,
@@ -1774,6 +1772,7 @@ var octopus = {
     einingar: 0,
     hlutfall: parseFloat(0),
     adrir: [],
+    litir: {},
     init: function () {
       history.replaceState(null,null,'index.html');
       if (localStorage.pagecount)
@@ -1828,48 +1827,11 @@ var octopus = {
       }
       this.adrir.push(model.kennari);
       model.init();
+      this.litir = this.lita();
       return v;
     },
     ryrnun: function() {
      return this.skerding;
-    },
-    chartLaunatafla: function (launaflokkur,threp) {
-        return {
-            'labels': ["1. mars 2013",
-                      "1. mars 2014",
-                      "1. ágúst 2014",
-                      "1. janúar 2015",
-                      "1. apríl 2015", 
-                      "1. júní 2015",
-                      "1. janúar 2016"
-                      ],
-            'data': [(launatafla01032013[launaflokkur][threp]/1000).toFixed(0),
-                 (launatafla01032014[launaflokkur][threp]/1000).toFixed(0),
-                 (launatafla01082014[launaflokkur][threp]/1000).toFixed(0),
-                 (launatafla01012015[launaflokkur][threp]/1000).toFixed(0),
-                 (launatafla01042015[launaflokkur][threp]/1000).toFixed(0),
-                 (launatafla01062015[launaflokkur][threp]/1000).toFixed(0),
-                 (launatafla01012016[launaflokkur][threp]/1000).toFixed(0)]
-        }
-    },
-    chartLaunataflaProsentur: function (launaflokkur,threp) {
-        return {
-            'labels': ["1. mars 2013",
-                      "1. mars 2014",
-                      "1. ágúst 2014",
-                      "1. janúar 2015",
-                      "1. apríl 2015", 
-                      "1. júní 2015",
-                      "1. janúar 2016"
-                      ],
-            'data': [(launatafla01032013[launaflokkur][threp]/launatafla01032013[launaflokkur][threp]*100-100).toFixed(2),
-                 (launatafla01032014[launaflokkur][threp]/launatafla01032013[launaflokkur][threp]*100-100).toFixed(2),
-                 (launatafla01082014[launaflokkur][threp]/launatafla01032013[launaflokkur][threp]*100-100).toFixed(2),
-                 (launatafla01012015[launaflokkur][threp]/launatafla01032013[launaflokkur][threp]*100-100).toFixed(2),
-                 (launatafla01042015[launaflokkur][threp]/launatafla01032013[launaflokkur][threp]*100-100).toFixed(2),
-                 (launatafla01062015[launaflokkur][threp]/launatafla01032013[launaflokkur][threp]*100-100).toFixed(2),
-                 (launatafla01012016[launaflokkur][threp]/launatafla01032013[launaflokkur][threp]*100-100).toFixed(2)]
-        }
     },
     orlof: function(artal) {
         return orlofsuppbot[artal];
@@ -1878,30 +1840,25 @@ var octopus = {
         return desemberuppbot[artal];
     },
     dagvinna: function(launaflokkur,threp) {
-       var dagvinnufylki = [launatafla01032013[launaflokkur][threp],launatafla01012016[launaflokkur][threp]];
-       return dagvinnufylki;
+       var dagvinn = launatafla01012016[launaflokkur][threp];
+       return parseFloat(dagvinn);
     },
     yfirvinna: function(launaflokkur,threp,yfirvinnutimar) {
       if (yfirvinnutimar <= 0) {
-        return [0,0,0,0];
+        return parseFloat(0);
       }
       else {
-        var y2013 = 0.010385*2*yfirvinnutimar*launatafla01032013[launaflokkur][threp];
         var y2016 = 0.010385*2*yfirvinnutimar*launatafla01012016[launaflokkur][threp];
-        return [y2013/12,y2016/12];
+        return y2016/parseFloat(12);
       }
       
     },
-    launSamanburdur: function(launaflokkur,threp,yfirvinnaNyja,yfirvinnaGamla) {
-     var laun2013 = this.yfirvinna(launaflokkur,threp,yfirvinnaGamla)[0];
-     laun2013 += this.dagvinna(launaflokkur,threp)[0];
-     laun2013 += this.desember('2013')/12;
-     laun2013 += this.orlof('2013')/12;
-     var laun2016 = this.yfirvinna(launaflokkur,threp,yfirvinnaNyja)[1];
-     laun2016 += this.dagvinna(launaflokkur,threp)[1];
+    launKennari: function(launaflokkur,threp,yfirvinnaNyja,yfirvinnaGamla) {
+     var laun2016 = this.yfirvinna(launaflokkur,threp,yfirvinnaNyja);
+     laun2016 += this.dagvinna(launaflokkur,threp);
      laun2016 += this.desember('2016')/12;
      laun2016 += this.orlof('2016')/12;
-     return [laun2013/1000,laun2016/1000];
+     return laun2016/1000;
     },
     teiknaSynidaemi: function(nafn1,e1,nafn2,e2,fjoldatolur) {
       var gildi1 = [];
@@ -1917,19 +1874,19 @@ var octopus = {
         'seinna': gildi2
       }
     },
-    alag: function() {
+    lita: function() {
       var d = {}
       for (var i = 0; i < model.kennarar.length; i++) {
        if (model.kennarar[i].alag()) {
-        d[model.kennarar[i].heiti] = "#d3ac2b";
+        d[model.kennarar[i].heiti] = "red";
        }
        else{
-        d[model.kennarar[i].heiti] = "#fff";
+        d[model.kennarar[i].heiti] = "#d3ac2b";
        }
       }
-
       return d
     }
+
 };
 
 var view = {
@@ -2125,14 +2082,14 @@ var view = {
     var threp = document.getElementById("threp").value;
  
     var yfirvinnaNyja = summa-vinnuskylda;
-    var ls = octopus.launSamanburdur(launaflokkur,threp,yfirvinnaNyja,vinnumatGamla);
-    document.getElementById("manadarlaun").value = (ls[1]).toFixed(3);
-    var launatexti = 'Áætluð mánaðarlaun miðað við fullt starf reiknast ' + (ls[1]).toFixed(3) + ' krónur.';
+    var ls = octopus.launKennari(launaflokkur,threp,yfirvinnaNyja,vinnumatGamla);
+    document.getElementById("manadarlaun").value = ls.toFixed(3);
+    var launatexti = 'Áætluð mánaðarlaun miðað við fullt starf reiknast ' + (ls).toFixed(3) + ' krónur.';
     launatexti += '<ul class="list-group"> Þau eru summa eftirfarandi þátta:';
     launatexti += '<li class="list-group-item"> Orlofsuppbót: '+ (octopus.orlof('2016')/1000).toFixed(3) +'/12 krónur.</li>';
     launatexti += '<li class="list-group-item"> Desemberuppbót: '+ (octopus.desember('2016')/1000).toFixed(3) +'/12 krónur</li>';
     launatexti += '<li class="list-group-item"> Dagvinna (launaflokkur= '+launaflokkur+', þrep= '+ threp+'): '
-    launatexti += (octopus.dagvinna(launaflokkur,threp)[1]/1000).toFixed(3)+' krónur</li>';
+    launatexti += (octopus.dagvinna(launaflokkur,threp)/1000).toFixed(3)+' krónur</li>';
     var yfirvinnaBirta;
     if (yfirvinnaNyja < 0) {
         yfirvinnaBirta = 0;
@@ -2215,7 +2172,8 @@ var view = {
      }
      var ctx = document.getElementById("canvas3").getContext("2d");
      window.adrir = new Chart(ctx).Bar(barChartData, opt);
-     var colors = octopus.alag();
+     var colors = octopus.litir;
+     console.log(colors);
       for (var i = 0; i < window.adrir.datasets[0].bars.length; i++) {
          var kennaranafn = window.adrir.datasets[0].bars[i].label;
          if (kennaranafn === 'Þú') {
