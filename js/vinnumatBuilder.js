@@ -1712,19 +1712,17 @@ Kennari.prototype.getName = function () {
 };
 
 Kennari.prototype.actualFjoldi = function () {
-    var s = 0;
-    console.log(this.originalAfangar.length);
+    var s = parseInt(0);
+
     for (var i = 0; i < this.originalAfangar.length; i++) {
-      s += this.originalAfangar[i].Fjoldi();
-      console.log('prump');
+      s += parseInt(this.originalAfangar[i].Fjoldi());
     }
     return s;
 };
 Kennari.prototype.alag = function() {
-    var n = 0;
-    console.log(this.actualFjoldi());
+    var n = parseInt(0);
     for (var i = 0; i < this.originalAfangar.length; i++) {
-      n += this.originalAfangar.hamark();
+      n += parseInt(this.originalAfangar[i].hamark());
     }
     if (n < this.actualFjoldi()) {
         return true;
@@ -1826,8 +1824,8 @@ var octopus = {
         this.adrir.push(model.kennarar[i]);
       }
       this.adrir.push(model.kennari);
-      model.init();
       this.litir = this.lita();
+      model.init();
       return v;
     },
     ryrnun: function() {
@@ -1930,7 +1928,6 @@ var view = {
    return golf;
   },
   init: function () {
-    
     var button1 = document.getElementById('add');
       button1.addEventListener('click',function() {
       afangar.fjoldi += 1;
@@ -1938,7 +1935,6 @@ var view = {
       addRow(afangiCol);
       
     });
-    
     var self = this;
     $('.nava').click(function() {
       ('.nava').parent().removeClass('active');
@@ -2033,14 +2029,15 @@ var view = {
     //var fyrirsagnir = document.getElementsByClassName('hopanafn');
     for (var i=1; i <= afangar.fjoldi; i++) {
         var heiti = document.getElementById('h-'+i).value;
-        //if (heiti != '') {
-        //    fyrirsagnir[i-1].innerHTML = heiti;
-        //}
-        var einingar = document.getElementById('e-'+i).value;
-        var fjoldi = document.getElementById('f-'+i).value;
-        var synid = document.getElementById('s-'+i).value;
-        var param = new Array(heiti,einingar,fjoldi,synid);
-        octopus.addAfangi(param);
+        if (heiti != '') {
+           //fyrirsagnir[i-1].innerHTML = heiti;
+           var einingar = document.getElementById('e-'+i).value;
+           var fjoldi = document.getElementById('f-'+i).value;
+           var synid = document.getElementById('s-'+i).value;
+           var param = new Array(heiti,einingar,fjoldi,synid);
+           octopus.addAfangi(param);
+        }
+        
      }
      $('.hidden').removeClass('hidden');
      $('.visiblenon').removeClass('visiblenon');
@@ -2173,7 +2170,6 @@ var view = {
      var ctx = document.getElementById("canvas3").getContext("2d");
      window.adrir = new Chart(ctx).Bar(barChartData, opt);
      var colors = octopus.litir;
-     console.log(colors);
       for (var i = 0; i < window.adrir.datasets[0].bars.length; i++) {
          var kennaranafn = window.adrir.datasets[0].bars[i].label;
          if (kennaranafn === 'Þú') {
