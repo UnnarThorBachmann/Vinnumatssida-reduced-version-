@@ -2012,7 +2012,7 @@ var view = {
        window.myLine.destroy();
      }
      
-      var ctx = document.getElementById("canvas6").getContext("2d");
+      var ctx = document.getElementById("canvas2").getContext("2d");
         window.myLine = new Chart(ctx).Line(lineChartData, {
         responsive: true
       });
@@ -2167,7 +2167,7 @@ var view = {
         responsive:true
       };
      }
-     var ctx = document.getElementById("canvas3").getContext("2d");
+     var ctx = document.getElementById("canvas1").getContext("2d");
      window.adrir = new Chart(ctx).Bar(barChartData, opt);
      var colors = octopus.litir;
       for (var i = 0; i < window.adrir.datasets[0].bars.length; i++) {
