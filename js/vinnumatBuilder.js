@@ -1623,6 +1623,7 @@ Kennari.prototype.addAfangi = function(afangi,hlutfall) {
   this.afangar.push(afangi);
   this.originalAfangar.push(afangi);
   this.fjoldi += 1;
+  this.ryrnun = [];
 };
 Kennari.prototype.compare = function (a,b) {
   if (a.heiti == b.heiti) {
@@ -1681,6 +1682,9 @@ Kennari.prototype.toString = function() {
 };
 Kennari.prototype.ryra = function() {
   this.sort();
+  for (var i = 0; i < this.fjoldi; i++) {
+    this.ryrnun.push(parseFloat(0));
+  }
   var i = 0;
   while (i < this.afangar.length) {
     var j = i;
@@ -1702,16 +1706,15 @@ Kennari.prototype.ryra = function() {
       for (var k = 0; k < this.originalAfangar.length; k++) {
         if ((j-i) == 2 && this.originalAfangar[k].heiti == this.afangar[i].heiti) {
           this.originalAfangar[k].setVinnumat(parseFloat(this.originalAfangar[k].vinnumat())-0.05*parseFloat(shadow.vinnumat()));
-          this.ryrnun += 0.05*parseFloat(shadow.vinnumat());
+          this.ryrnun[k]=0.05*parseFloat(shadow.vinnumat());
         }
         else if ((j-i) == 3 && this.originalAfangar[k].heiti == this.afangar[i].heiti) {
           this.originalAfangar[k].setVinnumat(parseFloat(this.originalAfangar[k].vinnumat())-0.0633*parseFloat(shadow.vinnumat()));
-          this.ryrnun += 0.0633*parseFloat(shadow.vinnumat());
+          this.ryrnun[k] = 0.0633*parseFloat(shadow.vinnumat());
         }
         else if ((j-i) > 3 && this.originalAfangar[k].heiti == this.afangar[i].heiti){
           this.originalAfangar[k].setVinnumat(parseFloat(this.originalAfangar[k].vinnumat())-0.075*parseFloat(shadow.vinnumat()));
-          this.ryrnun += 0.075*parseFloat(shadow.vinnumat());
-
+          this.ryrnun[k] = 0.075*parseFloat(shadow.vinnumat());
         }
       }// end of for
       i = j;
@@ -1741,6 +1744,13 @@ Kennari.prototype.alag = function() {
     else {
         return false;
     }
+};
+Kennari.prototype.ryrnunAfanga = function () {
+  var s = 0;
+  for (var i = 0; i < this.ryrnun.length; i++) {
+    s += this.ryrnun[i]*parseFloat(this.hlutfoll[i])/parseFloat(100);
+  }
+  return s;
 };
 var model = {
     kennari: null,
@@ -1825,7 +1835,7 @@ var octopus = {
       //for (var i = 0; i < model.kennari.fjoldi; i++) {
       //  v.push(model.kennari.originalAfangar[i].vinnumat());
       //}
-      this.skerding = model.kennari.ryrnun;
+      this.skerding = model.kennari.ryrnunAfanga();
       this.summa = model.kennari.heildarvinnumat();
       this.einingar = model.kennari.totalEiningar();
       this.adrir = [];
