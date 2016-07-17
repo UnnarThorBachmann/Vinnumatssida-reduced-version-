@@ -1555,10 +1555,10 @@ Afangi.prototype.hamark = function() {
     return this.synid.hamark_n;
 }
 Afangi.prototype.vinnumat = function() {
-  if (this.synid.heiti === 'Fjarnám') {
-    var kennslustundir = (1 + ((this.einingar * 2)-1)*this.fjoldi/39);
-    return (this.fjoldi === 0) ? 0:1.8*18*kennslustundir;
-  }
+  //if (this.synid.heiti === 'Fjarnám') {
+  //  var kennslustundir = (1 + ((this.einingar * 2)-1)*this.fjoldi/39);
+  //  return (this.fjoldi === 0) ? 0:1.8*18*kennslustundir;
+  //}
   if (this.vm != -1) {
     return this.vm;
   } 
@@ -1604,6 +1604,8 @@ var Kennari = function (nafn) {
   this.heiti = nafn;
   this.afangar = [];
   this.originalAfangar = [];
+  this.hlutfoll = [];
+  this.originalAfangarVinnumat = [];
   this.ryrnun = 0;
   this.fjoldi = 0;
 };
@@ -1616,7 +1618,8 @@ Kennari.prototype.totalEiningar = function () {
   }
   return et;
 };
-Kennari.prototype.addAfangi = function(afangi) {
+Kennari.prototype.addAfangi = function(afangi,hlutfall) {
+  this.hlutfoll.push(hlutfall);
   this.afangar.push(afangi);
   this.originalAfangar.push(afangi);
   this.fjoldi += 1;
@@ -1655,9 +1658,17 @@ Kennari.prototype.sort = function() {
 Kennari.prototype.heildarvinnumat = function() {
   var s = 0;
   for (var i=0; i < this.fjoldi; i++) {
-    s += this.originalAfangar[i].vinnumat();
+    var raunvinnumat = this.originalAfangar[i].vinnumat()*parseFloat(this.hlutfoll[i])/parseFloat(100);
+    s += raunvinnumat;
   }
   return s;
+};
+Kennari.prototype.vinnumatAfanga = function() {
+  for (var i=0; i < this.fjoldi; i++) {
+    var raunvinnumat = this.originalAfangar[i].vinnumat()*parseFloat(this.hlutfoll[i])/parseFloat(100);
+    this.originalAfangarVinnumat.push(raunvinnumat);
+  }
+  return this.originalAfangarVinnumat;
 };
 Kennari.prototype.toString = function() {
   this.sort();
@@ -1797,11 +1808,12 @@ var octopus = {
       return (isNaN(n) || n.length === 0 || !n)? 0:parseFloat(n);
     },
     addAfangi: function(param) {
-        model.kennari.addAfangi(new Afangi(param));
+
+        model.kennari.addAfangi(new Afangi(param.slice(0,-1)),param[param.length-1]);
         for (var i = 0; i < model.kennarar.length; i++) {
             param[3] = model.kennarar[i].getName()
-            var afTemp = new Afangi(param);
-            model.kennarar[i].addAfangi(afTemp);
+            var afTemp = new Afangi(param.slice(0,-1));
+            model.kennarar[i].addAfangi(afTemp,param[param.length-1]);
         }
     },
     kennarar: function() {
@@ -1809,10 +1821,10 @@ var octopus = {
     },
     vinnumat: function () {
       model.kennari.ryra();
-      var v  = [];
-      for (var i = 0; i < model.kennari.fjoldi; i++) {
-        v.push(model.kennari.originalAfangar[i].vinnumat());
-      }
+      var v  = model.kennari.vinnumatAfanga();
+      //for (var i = 0; i < model.kennari.fjoldi; i++) {
+      //  v.push(model.kennari.originalAfangar[i].vinnumat());
+      //}
       this.skerding = model.kennari.ryrnun;
       this.summa = model.kennari.heildarvinnumat();
       this.einingar = model.kennari.totalEiningar();
@@ -1851,7 +1863,7 @@ var octopus = {
       }
       
     },
-    launKennari: function(launaflokkur,threp,yfirvinnaNyja,yfirvinnaGamla) {
+    launKennari: function(launaflokkur,threp,yfirvinnaNyja) {
      var laun2016 = this.yfirvinna(launaflokkur,threp,yfirvinnaNyja);
      laun2016 += this.dagvinna(launaflokkur,threp);
      laun2016 += this.desember('2016')/12;
@@ -2034,7 +2046,8 @@ var view = {
            var einingar = document.getElementById('e-'+i).value;
            var fjoldi = document.getElementById('f-'+i).value;
            var synid = document.getElementById('s-'+i).value;
-           var param = new Array(heiti,einingar,fjoldi,synid);
+           var hlutf =  octopus.parseNumberField(document.getElementById('p-'+i).value);
+           var param = new Array(heiti,einingar,fjoldi,synid,hlutf);
            octopus.addAfangi(param);
         }
         
@@ -2042,13 +2055,15 @@ var view = {
      $('.hidden').removeClass('hidden');
      $('.visiblenon').removeClass('visiblenon');
      var vinnumat = octopus.vinnumat();
+     var summa = parseFloat(0);
      for (var j = 1; j <= afangar.fjoldi; j++) {
-        var vmat = vinnumat[j-1]*parseFloat(octopus.parseNumberField(document.getElementById('p-'+j).value))/100;
         var heiti = document.getElementById('h-'+ j).value;
-        var fjoldiNem = document.getElementById('f-'+ j).value;
-        var synid = document.getElementById('s-'+ j).value;
-        var en = document.getElementById('e-'+ j).value;
         if (heiti != '') {
+            var vmat = vinnumat[j-1];//*parseFloat(octopus.parseNumberField(document.getElementById('p-'+j).value))/100;
+            summa += parseFloat(vmat);
+            var fjoldiNem = document.getElementById('f-'+ j).value;
+            var synid = document.getElementById('s-'+ j).value;
+            var en = document.getElementById('e-'+ j).value;
             document.getElementById('v-'+j).innerHTML =  
             '<ul class="list-group"><li class="list-group-item"><strong>' + heiti +'</strong></li>'
             + '<li class="list-group-item">Vinnumat: ' + octopus.parseOutput(vmat,100) + ' klst. </li>'
@@ -2062,24 +2077,25 @@ var view = {
         }
      }
      var onnur = document.getElementById('onnurVinna').value;
-     var summa =   octopus.parseNumberField(parseFloat(onnur.toString().replace(',','.')));
-     summa += octopus.summa;
+     //var summa = octopus.parseNumberField(parseFloat(onnur.toString().replace(',','.')));
+     //summa += octopus.summa;
+     summa += parseFloat(onnur.toString().replace(',','.'));
      var vinnuskylda = view.vinnuskylda(onnur);
      document.getElementById('vinnuskylda').value = octopus.parseOutput(vinnuskylda,10);
      document.getElementById('dagsskoli').value = octopus.parseOutput(summa,10);
      document.getElementById('A-hluti').value = octopus.parseOutput(summa - vinnuskylda,10);
      document.getElementById('skerding').value = octopus.parseOutput(octopus.skerding,10);
 
-    var vinnuskyldaGamla = view.vinnuskyldaGamla(onnur);
-    var vinnumatGamla = Math.max(0,(2*octopus.einingar-parseFloat(vinnuskyldaGamla))*18*1.3);
-    if (2*octopus.einingar-parseFloat(vinnuskyldaGamla) >= 0) {
-      vinnumatGamla += parseFloat(onnur);
-    }
+    //var vinnuskyldaGamla = view.vinnuskyldaGamla(onnur);
+    //var vinnumatGamla = Math.max(0,(2*octopus.einingar-parseFloat(vinnuskyldaGamla))*18*1.3);
+    //if (2*octopus.einingar-parseFloat(vinnuskyldaGamla) >= 0) {
+    //  vinnumatGamla += parseFloat(onnur);
+    //}
     var launaflokkur = document.getElementById("launaflokkur").value;
     var threp = document.getElementById("threp").value;
  
     var yfirvinnaNyja = summa-vinnuskylda;
-    var ls = octopus.launKennari(launaflokkur,threp,yfirvinnaNyja,vinnumatGamla);
+    var ls = octopus.launKennari(launaflokkur,threp,yfirvinnaNyja);
     document.getElementById("manadarlaun").value = ls.toFixed(3);
     var launatexti = 'Áætluð mánaðarlaun miðað við fullt starf reiknast ' + (ls).toFixed(3) + ' krónur.';
     launatexti += '<ul class="list-group"> Þau eru summa eftirfarandi þátta:';
