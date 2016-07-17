@@ -1702,15 +1702,15 @@ Kennari.prototype.ryra = function() {
       for (var k = 0; k < this.originalAfangar.length; k++) {
         if ((j-i) == 2 && this.originalAfangar[k].heiti == this.afangar[i].heiti) {
           this.originalAfangar[k].setVinnumat(parseFloat(this.originalAfangar[k].vinnumat())-0.05*parseFloat(shadow.vinnumat()));
-          this.ryrnun += 0.04*parseFloat(shadow.vinnumat());
+          this.ryrnun += 0.05*parseFloat(shadow.vinnumat());
         }
         else if ((j-i) == 3 && this.originalAfangar[k].heiti == this.afangar[i].heiti) {
           this.originalAfangar[k].setVinnumat(parseFloat(this.originalAfangar[k].vinnumat())-0.0633*parseFloat(shadow.vinnumat()));
-          this.ryrnun += 0.0533*parseFloat(shadow.vinnumat());
+          this.ryrnun += 0.0633*parseFloat(shadow.vinnumat());
         }
         else if ((j-i) > 3 && this.originalAfangar[k].heiti == this.afangar[i].heiti){
           this.originalAfangar[k].setVinnumat(parseFloat(this.originalAfangar[k].vinnumat())-0.075*parseFloat(shadow.vinnumat()));
-          this.ryrnun += 0.06*parseFloat(shadow.vinnumat());
+          this.ryrnun += 0.075*parseFloat(shadow.vinnumat());
 
         }
       }// end of for
