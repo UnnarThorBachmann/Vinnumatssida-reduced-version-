@@ -1600,19 +1600,19 @@ var Kennari = function (nafn,afangar,hlutfoll) {
   this.heiti = nafn;
   this.afangar = [];
   this.originalAfangar = [];
-  self = this;
 
   afangar.forEach(function(afangi){
-    self.originalAfangar.push(new Afangi(afangi));
-  },self);
-  this.afangar.forEach(function(afangi){
-    self.afangar.push(new Afangi(afangi));
-  },self);
+    this.originalAfangar.push(new Afangi(afangi));
+  },this);
+  afangar.forEach(function(afangi){
+    this.afangar.push(new Afangi(afangi));
+  },this);
   this.hlutfoll = hlutfoll;
   this.originalAfangarVinnumat = [];
   this.ryrnun = [];
   this.fjoldi = this.originalAfangar.length;
   this.ryra();
+  console.log()
 };
 Kennari.prototype.totalEiningar = function () {
   var et = 0;
@@ -1687,6 +1687,9 @@ Kennari.prototype.toString = function() {
   return s;
 };
 Kennari.prototype.ryra = function() {
+  console.log("prump");
+  console.log(this.afangar);
+  console.log(this.originalAfangar);
   this.sort();
   for (var i = 0; i < this.fjoldi; i++) {
     this.ryrnun.push(parseFloat(0));
@@ -1927,26 +1930,6 @@ var view = {
     golf = 551;
    }
    return octopus.vinnuskylda(c,golf);
-  },
-    vinnuskyldaGamla: function(c) {
-   var golf = 0;
-
-   if (document.getElementById('golf').value === '30 ára-' ) {
-      golf = 24;
-   }
-   else if (document.getElementById('golf').value === '30-37 ára') {
-     golf = 24;
-   }
-   else if (document.getElementById('golf').value === '38-54 ára') {
-    golf = 24;
-   }
-   else if (document.getElementById('golf').value === '55-59 ára') {
-    golf = 23;
-   }
-   else {
-    golf = 19;
-   }
-   return golf;
   },
   init: function () {
     var button1 = document.getElementById('add');
