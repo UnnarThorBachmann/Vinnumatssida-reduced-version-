@@ -1555,10 +1555,6 @@ Afangi.prototype.hamark = function() {
     return this.synid.hamark_n;
 }
 Afangi.prototype.vinnumat = function() {
-  //if (this.synid.heiti === 'Fjarnám') {
-  //  var kennslustundir = (1 + ((this.einingar * 2)-1)*this.fjoldi/39);
-  //  return (this.fjoldi === 0) ? 0:1.8*18*kennslustundir;
-  //}
   if (this.vm != -1) {
     return this.vm;
   } 
@@ -1600,14 +1596,23 @@ Afangi.prototype.toString = function() {
   return "Heiti: " + this.heiti + " Einingar: " + this.einingar + " Fjöldi: " + this.fjoldi + " vm: " + this.vm;
 };
 
-var Kennari = function (nafn) {
+var Kennari = function (nafn,afangar,hlutfoll) {
   this.heiti = nafn;
   this.afangar = [];
   this.originalAfangar = [];
-  this.hlutfoll = [];
+  self = this;
+
+  afangar.forEach(function(afangi){
+    self.originalAfangar.push(new Afangi(afangi));
+  },self);
+  this.afangar.forEach(function(afangi){
+    self.afangar.push(new Afangi(afangi));
+  },self);
+  this.hlutfoll = hlutfoll;
   this.originalAfangarVinnumat = [];
-  this.ryrnun = 0;
-  this.fjoldi = 0;
+  this.ryrnun = [];
+  this.fjoldi = this.originalAfangar.length;
+  this.ryra();
 };
 Kennari.prototype.totalEiningar = function () {
   var et = 0;
@@ -1618,13 +1623,13 @@ Kennari.prototype.totalEiningar = function () {
   }
   return et;
 };
+/*
 Kennari.prototype.addAfangi = function(afangi,hlutfall) {
   this.hlutfoll.push(hlutfall);
   this.afangar.push(afangi);
   this.originalAfangar.push(afangi);
   this.fjoldi += 1;
-  this.ryrnun = [];
-};
+};*/
 Kennari.prototype.compare = function (a,b) {
   if (a.heiti == b.heiti) {
     return 0;
@@ -1666,7 +1671,8 @@ Kennari.prototype.heildarvinnumat = function() {
 };
 Kennari.prototype.vinnumatAfanga = function() {
   for (var i=0; i < this.fjoldi; i++) {
-    var raunvinnumat = this.originalAfangar[i].vinnumat()*parseFloat(this.hlutfoll[i])/parseFloat(100);
+    var raunvinnumat = this.originalAfangar[i].vinnumat();
+    raunvinnumat *=parseFloat(this.hlutfoll[i])/parseFloat(100);
     this.originalAfangarVinnumat.push(raunvinnumat);
   }
   return this.originalAfangarVinnumat;
@@ -1754,33 +1760,43 @@ Kennari.prototype.ryrnunAfanga = function () {
 };
 var model = {
     kennari: null,
-    kennarar: null,
-    init: function () {
-      this.kennari = new Kennari("Þú");
-      this.kennarar = [new Kennari('Félagsgreinar, efra þrep'),
-                       new Kennari('Félagsgreinar, neðra þrep'),
-                       new Kennari('Íslenska, efra þrep'),
-                       new Kennari('Íslenska, neðra þrep'),
-                       new Kennari('Stærðfræði, efra þrep'),
-                       new Kennari('Stærðfræði, neðra þrep'),
-                       new Kennari('Danska, neðra þrep'),
-                       new Kennari('Danska, efra þrep'),
-                       new Kennari('Listgreinar, efra þrep'),
-                       new Kennari('Listgreinar, neðra þrep'),
-                       new Kennari('Enska, efra þrep'),
-                       new Kennari('Enska, neðra þrep'),
-                       new Kennari('Erlend mál, efra þrep'),
-                       new Kennari('Erlend mál, neðra þrep'),
-                       new Kennari('Tölvuáfangar'),
-                       new Kennari('Verklegt'),
-                       new Kennari('Fagbóklegt'),
-                       new Kennari('Jarðfræði'),
-                       new Kennari('Íþróttafræði'),
-                       new Kennari('Almennar raungreinar'),
-                       new Kennari('Almenn braut'),
-                       new Kennari('Raungreinar, efra þrep'),
-                       new Kennari('Raungreinar, neðra þrep')
-                       ];
+    kennarar: [],
+    init: function (_afangar,hlutfoll) {
+    var kennararNofn = ['Félagsgreinar, efra þrep',
+                         'Félagsgreinar, neðra þrep',
+                         'Íslenska, efra þrep',
+                         'Íslenska, neðra þrep',
+                         'Stærðfræði, efra þrep',
+                         'Stærðfræði, neðra þrep',
+                         'Danska, neðra þrep',
+                         'Danska, efra þrep',
+                         'Listgreinar, efra þrep',
+                         'Listgreinar, neðra þrep',
+                         'Enska, efra þrep',
+                         'Enska, neðra þrep',
+                         'Erlend mál, efra þrep',
+                         'Erlend mál, neðra þrep',
+                         'Tölvuáfangar',
+                         'Verklegt',
+                         'Fagbóklegt',
+                         'Jarðfræði',
+                         'Íþróttafræði',
+                         'Almennar raungreinar',
+                         'Almenn braut',
+                         'Raungreinar, efra þrep',
+                         'Raungreinar, neðra þrep',
+    ];
+    this.kennari = new Kennari("Þú",_afangar,hlutfoll);
+    this.kennarar = [];
+      
+      for (var i = 0; i < kennararNofn.length; i++) {
+        var nafn = kennararNofn[i];
+
+        for (var j= 0; j < _afangar.length; j++) {
+          _afangar[j] = [nafn,_afangar[j][1],_afangar[j][2],nafn];
+        }
+        this.kennarar.push(new Kennari(nafn,_afangar,hlutfoll));
+      }
     }
 };
 
@@ -1794,19 +1810,15 @@ var octopus = {
     litir: {},
     init: function () {
       history.replaceState(null,null,'index.html');
-      if (localStorage.pagecount)
-     {
+      if (localStorage.pagecount) {
        localStorage.pagecount=Number(localStorage.pagecount) +1;
      }
-     else
-     {
+     else {
        localStorage.pagecount=1;
      }
      view.init();
-     model.init();
     },
     vinnuskylda: function (klstChluti, vinnusk) {
-        //this.hlutfall = parseFloat(1)-parseFloat(klstChluti)/parseFloat(vinnusk);
         return model.kennari.vinnuskylda(klstChluti, vinnusk);
     },
     parseOutput: function(i,digits) {
@@ -1817,37 +1829,24 @@ var octopus = {
     parseNumberField: function(n) {
       return (isNaN(n) || n.length === 0 || !n)? 0:parseFloat(n);
     },
-    addAfangi: function(param) {
-
-        model.kennari.addAfangi(new Afangi(param.slice(0,-1)),param[param.length-1]);
-        for (var i = 0; i < model.kennarar.length; i++) {
-            param[3] = model.kennarar[i].getName()
-            var afTemp = new Afangi(param.slice(0,-1));
-            model.kennarar[i].addAfangi(afTemp,param[param.length-1]);
-        }
+    createKennari: function(afangar,hlutfoll) {
+        model.init(afangar,hlutfoll);
     },
     kennarar: function() {
         return this.adrir;
     },
     vinnumat: function () {
-      model.kennari.ryra();
       var v  = model.kennari.vinnumatAfanga();
-      //for (var i = 0; i < model.kennari.fjoldi; i++) {
-      //  v.push(model.kennari.originalAfangar[i].vinnumat());
-      //}
       this.skerding = model.kennari.ryrnunAfanga();
       this.summa = model.kennari.heildarvinnumat();
       this.einingar = model.kennari.totalEiningar();
       this.adrir = [];
       for (var i = 0; i < model.kennarar.length; i++) {
-        model.kennarar[i].ryra();
-      }
-      for (var i = 0; i < model.kennarar.length; i++) {
         this.adrir.push(model.kennarar[i]);
       }
+      
       this.adrir.push(model.kennari);
       this.litir = this.lita();
-      model.init();
       return v;
     },
     ryrnun: function() {
@@ -2048,20 +2047,21 @@ var view = {
     });
   },// end of init.
   calc: function () {
-    //var fyrirsagnir = document.getElementsByClassName('hopanafn');
+    var af = [];
+    var hlutfoll = []
     for (var i=1; i <= afangar.fjoldi; i++) {
         var heiti = document.getElementById('h-'+i).value;
         if (heiti != '') {
-           //fyrirsagnir[i-1].innerHTML = heiti;
            var einingar = document.getElementById('e-'+i).value;
            var fjoldi = document.getElementById('f-'+i).value;
            var synid = document.getElementById('s-'+i).value;
            var hlutf =  octopus.parseNumberField(document.getElementById('p-'+i).value);
-           var param = new Array(heiti,einingar,fjoldi,synid,hlutf);
-           octopus.addAfangi(param);
+           var param = [heiti,einingar,fjoldi,synid];
+           af.push(param);
+           hlutfoll.push(hlutf);
         }
-        
-     }
+    }
+    octopus.createKennari(af,hlutfoll);
      $('.hidden').removeClass('hidden');
      $('.visiblenon').removeClass('visiblenon');
      var vinnumat = octopus.vinnumat();
@@ -2087,8 +2087,6 @@ var view = {
         }
      }
      var onnur = document.getElementById('onnurVinna').value;
-     //var summa = octopus.parseNumberField(parseFloat(onnur.toString().replace(',','.')));
-     //summa += octopus.summa;
      summa += parseFloat(onnur.toString().replace(',','.'));
      var vinnuskylda = view.vinnuskylda(onnur);
      document.getElementById('vinnuskylda').value = octopus.parseOutput(vinnuskylda,10);
@@ -2096,11 +2094,7 @@ var view = {
      document.getElementById('A-hluti').value = octopus.parseOutput(summa - vinnuskylda,10);
      document.getElementById('skerding').value = octopus.parseOutput(octopus.skerding,10);
 
-    //var vinnuskyldaGamla = view.vinnuskyldaGamla(onnur);
-    //var vinnumatGamla = Math.max(0,(2*octopus.einingar-parseFloat(vinnuskyldaGamla))*18*1.3);
-    //if (2*octopus.einingar-parseFloat(vinnuskyldaGamla) >= 0) {
-    //  vinnumatGamla += parseFloat(onnur);
-    //}
+    
     var launaflokkur = document.getElementById("launaflokkur").value;
     var threp = document.getElementById("threp").value;
  
