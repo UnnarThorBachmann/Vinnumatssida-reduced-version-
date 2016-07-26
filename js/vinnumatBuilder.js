@@ -1645,7 +1645,23 @@ Kennari.prototype.compare = function (a,b) {
     return 1;
   }
 };
-Kennari.prototype.vinnuskylda = function(klstChluti, vinnuskylda) {
+Kennari.prototype.vinnuskylda = function(klstChluti,vinnuskyldaTexti) {
+  var vinnuskylda = 0;
+   if (vinnuskyldaTexti === '30 ára-' ) {
+      vinnuskylda = 720;
+   }
+   else if (vinnuskyldaTexti === '30-37 ára') {
+     vinnuskylda = 708;
+   }
+   else if (vinnuskyldaTexti === '38-54 ára') {
+    vinnuskylda = 696;
+   }
+   else if (vinnuskyldaTexti === '55-59 ára') {
+    vinnuskylda = 667;
+   }
+   else {
+    vinnuskylda = 551;
+   }
   if (vinnuskylda > 667) {
     return parseFloat(vinnuskylda);
   }
@@ -1833,8 +1849,8 @@ var octopus = {
      }
      view.init();
     },
-    vinnuskylda: function (klstChluti, vinnusk) {
-        return model.kennari.vinnuskylda(klstChluti, vinnusk);
+    vinnuskylda: function (klstChluti,vinnuskyldaTexti) {
+        return model.kennari.vinnuskylda(klstChluti,vinnuskyldaTexti);
     },
     parseOutput: function(i,digits) {
       var output = (parseFloat(Math.round(i*digits))/digits).toString();
@@ -1945,24 +1961,8 @@ var octopus = {
 };
 
 var view = {
-   vinnuskylda: function(c) {
-   var golf = 0;
-   if (document.getElementById('golf').value === '30 ára-' ) {
-      golf = 720;
-   }
-   else if (document.getElementById('golf').value === '30-37 ára') {
-     golf = 708;
-   }
-   else if (document.getElementById('golf').value === '38-54 ára') {
-    golf = 696;
-   }
-   else if (document.getElementById('golf').value === '55-59 ára') {
-    golf = 667;
-   }
-   else {
-    golf = 551;
-   }
-   return octopus.vinnuskylda(c,golf);
+  vinnuskylda: function(c,vinnuskyldaTexti) {
+    return octopus.vinnuskylda(c,vinnuskyldaTexti);
   },
   init: function () {
     var button1 = document.getElementById('add');
@@ -2104,7 +2104,10 @@ var view = {
      }
      var onnur = document.getElementById('onnurVinna').value;
      summa += parseFloat(onnur.toString().replace(',','.'));
-     var vinnuskylda = view.vinnuskylda(onnur);
+     var golf = 0;
+     var vinnuskyldaTexti = document.getElementById('golf').value
+   
+     var vinnuskylda = view.vinnuskylda(onnur,vinnuskyldaTexti);
      document.getElementById('vinnuskylda').value = octopus.parseOutput(vinnuskylda,10);
      document.getElementById('dagsskoli').value = octopus.parseOutput(summa,10);
      document.getElementById('A-hluti').value = octopus.parseOutput(summa - vinnuskylda,10);
