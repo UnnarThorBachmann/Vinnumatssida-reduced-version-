@@ -1357,11 +1357,16 @@ var addRow = function (afangiCol) {
     var selectSynidaemi = document.createElement('select');
     selectSynidaemi.setAttribute('class','form-control');
     selectSynidaemi.setAttribute('id','s-'+ afangar.fjoldi);
-    for (var j = 0; j < afangar.synidaemi.length; j++) {
+    afangar.synidaemi.forEach(function(j){
+      var option = document.createElement('option');
+      option.text = j;
+      selectSynidaemi.appendChild(option);
+    });
+    /*for (var j = 0; j < afangar.synidaemi.length; j++) {
       var option = document.createElement('option');
       option.text = afangar.synidaemi[j];
       selectSynidaemi.appendChild(option);
-    }
+    }*/
     divSynidaemi.appendChild(selectSynidaemi);
     form.appendChild(divSynidaemi);
 
@@ -1612,7 +1617,6 @@ var Kennari = function (nafn,afangar,hlutfoll) {
   this.ryrnun = [];
   this.fjoldi = this.originalAfangar.length;
   this.ryra();
-  console.log()
 };
 Kennari.prototype.totalEiningar = function () {
   var et = 0;
@@ -1679,17 +1683,19 @@ Kennari.prototype.vinnumatAfanga = function() {
 };
 Kennari.prototype.toString = function() {
   this.sort();
-  var s = ""; 
-  for(var i = 0; i < this.afangar.length; i++) {
-    s += this.afangar[i].toString();
+  var s = this.heiti + '\n'; 
+  this.originalAfangar.forEach(function(afangi){
+    s += afangi.toString();
     s += "\n";
-  }
+  });
+  /*
+  for(var i = 0; i < this.originalAfangar.length; i++) {
+    s += this.originalAfangar[i].toString();
+    s += "\n";
+  }*/
   return s;
 };
 Kennari.prototype.ryra = function() {
-  console.log("prump");
-  console.log(this.afangar);
-  console.log(this.originalAfangar);
   this.sort();
   for (var i = 0; i < this.fjoldi; i++) {
     this.ryrnun.push(parseFloat(0));
@@ -1736,17 +1742,22 @@ Kennari.prototype.getName = function () {
 
 Kennari.prototype.actualFjoldi = function () {
     var s = parseInt(0);
-
-    for (var i = 0; i < this.originalAfangar.length; i++) {
+    this.originalAfangar.forEach(function(afangi){
+        s += parseInt(afangi.Fjoldi());
+    });
+    /*for (var i = 0; i < this.originalAfangar.length; i++) {
       s += parseInt(this.originalAfangar[i].Fjoldi());
-    }
+    }*/
     return s;
 };
 Kennari.prototype.alag = function() {
     var n = parseInt(0);
-    for (var i = 0; i < this.originalAfangar.length; i++) {
+    this.originalAfangar.forEach(function(afangi){
+        n += parseInt(afangi.hamark());
+    });
+    /*for (var i = 0; i < this.originalAfangar.length; i++) {
       n += parseInt(this.originalAfangar[i].hamark());
-    }
+    }*/
     if (n < this.actualFjoldi()) {
         return true;
     }
@@ -1798,6 +1809,7 @@ var model = {
         for (var j= 0; j < _afangar.length; j++) {
           _afangar[j] = [nafn,_afangar[j][1],_afangar[j][2],nafn];
         }
+        
         this.kennarar.push(new Kennari(nafn,_afangar,hlutfoll));
       }
     }
@@ -1844,9 +1856,12 @@ var octopus = {
       this.summa = model.kennari.heildarvinnumat();
       this.einingar = model.kennari.totalEiningar();
       this.adrir = [];
-      for (var i = 0; i < model.kennarar.length; i++) {
-        this.adrir.push(model.kennarar[i]);
-      }
+      model.kennarar.forEach(function(kennari){
+        this.adrir.push(kennari);
+      },this);
+      //for (var i = 0; i < model.kennarar.length; i++) {
+      //  this.adrir.push(model.kennarar[i]);
+      //}
       
       this.adrir.push(model.kennari);
       this.litir = this.lita();
@@ -1885,12 +1900,21 @@ var octopus = {
     teiknaSynidaemi: function(nafn1,e1,nafn2,e2,fjoldatolur) {
       var gildi1 = [];
       var gildi2 = [];
+      fjoldatolur.forEach(function(tala){
+        var af1 = new Afangi(
+                  new Array('a',e1,tala,nafn1));
+        gildi1.push(af1.vinnumat().toFixed(1));
+        var af2 = new Afangi(
+                  new Array('b',e2,tala,nafn2));
+        gildi2.push(af2.vinnumat().toFixed(1));
+      });
+      /*
       for (var i = 0; i < fjoldatolur.length; i++) {
         var af1 = new Afangi(new Array('a',e1,fjoldatolur[i],nafn1));
         gildi1.push(af1.vinnumat().toFixed(1));
         var af2 = new Afangi(new Array('b',e2,fjoldatolur[i],nafn2));
         gildi2.push(af2.vinnumat().toFixed(1));
-      }
+      }*/
       return {
         'fyrra': gildi1,
         'seinna': gildi2
@@ -1898,6 +1922,15 @@ var octopus = {
     },
     lita: function() {
       var d = {}
+      model.kennarar.forEach(function(kennari){
+        if (kennari.alag()) {
+        d[kennari.heiti] = "red";
+       }
+       else{
+        d[kennari.heiti] = "#d3ac2b";
+       }
+      },d);
+      /*
       for (var i = 0; i < model.kennarar.length; i++) {
        if (model.kennarar[i].alag()) {
         d[model.kennarar[i].heiti] = "red";
@@ -1905,7 +1938,7 @@ var octopus = {
        else{
         d[model.kennarar[i].heiti] = "#d3ac2b";
        }
-      }
+      }*/
       return d
     }
 
@@ -1967,10 +2000,10 @@ var view = {
       }
         $('.hopen').click();
       
-      var values = document.getElementsByClassName('v');
+      /*var values = document.getElementsByClassName('v');
       for (var i = 0; i < values.length; i++) {
         values[i].classList.remove('hidden');
-      }
+      }*/
     });
     var button3 = document.getElementById('berasaman');
     button3.addEventListener('click',function(e) {
@@ -2118,11 +2151,11 @@ var view = {
       }
      };
 
-     var temp = octopus.kennarar().sort(comp);
+     var kennararSorted = octopus.kennarar().sort(comp);
       
      var ken; 
      if (screen.width > 500) {
-       ken = temp;
+       ken = kennararSorted;
      }
      else {
         ken = [];
@@ -2130,12 +2163,19 @@ var view = {
                    'Fagbóklegt','Félagsgreinar, efra þrep','Íslenska, efra þrep','Jarðfræði',
                    'Listgreinar, efra þrep','Raungreinar, efra þrep','Sjúkraliðabraut',
                    'Stærðfræði, efra þrep','Tölvuáfangar','Verklegt','Þú'];
+        kennararSorted.forEach(function(kennari){
+          var j = sia.indexOf(kennari.heiti);
+            if (j > 0) {
+                ken.push(kennari);
+            }
+        },ken);
+        /*
         for (var i = 0; i < temp.length; i++) {
             var j = sia.indexOf(temp[i].heiti);
             if (j > 0) {
                 ken.push(temp[i]);
             }
-        }
+        }*/
      }
      var ls = [];
      var vs = [];
