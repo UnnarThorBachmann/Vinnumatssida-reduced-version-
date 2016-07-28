@@ -1690,6 +1690,7 @@ Kennari.prototype.heildarvinnumat = function() {
   return s;
 };
 Kennari.prototype.vinnumatAfanga = function() {
+  this.originalAfangarVinnumat = [];
   for (var i=0; i < this.fjoldi; i++) {
     var raunvinnumat = this.originalAfangar[i].vinnumat();
     raunvinnumat *=parseFloat(this.hlutfoll[i])/parseFloat(100);
