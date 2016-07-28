@@ -580,7 +580,6 @@ $(function() {
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Ársæll', afangar, hlutfoll);
       var vm = kennari.vinnumatAfanga();
-      console.log(vm);
       expect(Math.abs(vm[0]-182.32)).toBeLessThan(0.1);
       //expect(Math.abs(vm[1]-178.89)).toBeLessThan(0.1);
       expect(Math.abs(vm[2]-199.67)).toBeLessThan(0.1);
@@ -588,5 +587,176 @@ $(function() {
 
     });
   });
-  
+  /*
+  * Test 26: 
+  */
+   describe('Rétt vinnumat félagsfræðikennara', function() {
+    it("Aðalbjörg", function() {
+      var afangar = [['HBF 103', 3, 19,'Félagsgreinar, neðra þrep'],
+                    ['Sas 103', 3, 15,'Félagsgreinar, neðra þrep'],
+                    ['Sas 103', 3, 16,'Félagsgreinar, neðra þrep']
+      ];
+      var hlutfoll = [100,100,100,100];
+      var kennari = new Kennari('Aðalbjörg', afangar, hlutfoll);
+      var vm = kennari.vinnumatAfanga();
+      
+      expect(Math.abs(vm[0]-167.5)).toBeLessThan(0.1);
+      expect(Math.abs(vm[1]-154.375)).toBeLessThan(0.1);
+      expect(Math.abs(vm[2]-154.375)).toBeLessThan(0.1);
+
+    });
+  });
+/*
+  * Test 27: 
+  */
+   describe('Rétt vinnumat sögukennara', function() {
+    it("Arngrímur (óskertur)", function() {
+      var afangar = [['saga203', 3, 30,'Félagsgreinar, efra þrep'],
+                    ['saga193', 3, 15,'Almenn braut'],
+                    ['saga203', 3, 22,'Félagsgreinar, efra þrep'],
+                    ['saga303', 3, 20,'Félagsgreinar, efra þrep'],
+                    ['saga303', 3, 26,'Félagsgreinar, efra þrep']
+
+      ];
+      var hlutfoll = [100,100,100,50,50];
+      var kennari = new Kennari('Arngrímur', afangar, hlutfoll);
+      var vm = kennari.vinnumatAfanga();
+      var skerding = kennari.ryrnunAfanga();
+      expect(Math.abs(vm[0]-193.5)).toBeLessThan(0.3);
+      expect(Math.abs(vm[1]-174.5)).toBeLessThan(0.3);
+      expect(Math.abs(vm[2]-171.3)).toBeLessThan(0.3);
+      //expect(Math.abs(vm[3]-84.1)).toBeLessThan(0.1);
+      //expect(Math.abs(vm[4]-93)).toBeLessThan(0.1);
+    });
+  });
+/*
+  * Test 28: 
+  */
+   describe('Rétt vinnumat stærð/raun kennara', function() {
+    it("Unnar (óskertur)", function() {
+      var afangar = [['a', 3, 15,'Raungreinar, efra þrep'],
+                    ['b', 3, 15,'Stærðfræði, efra þrep'],
+                    ['c', 3, 25,'Stærðfræði, efra þrep'],
+                    ['d', 3, 11,'Stærðfræði, efra þrep']
+      ];
+      var hlutfoll = [100,100,100,100];
+      var kennari = new Kennari('Unnar',afangar, hlutfoll);
+      var vm = kennari.vinnumatAfanga();
+      expect(Math.abs(vm[0]-165.55)).toBeLessThan(0.1);
+      expect(Math.abs(vm[1]-161.39)).toBeLessThan(0.1);
+      expect(Math.abs(vm[2]-182.75)).toBeLessThan(0.1);
+      expect(Math.abs(vm[3]-161.39)).toBeLessThan(0.1);
+    });
+  });
+  /*
+  * Test 29: 
+  */
+   describe('Rétt vinnumat listgreinakennara', function() {
+    it("Gréta", function() {
+      var afangar = [['a', 3, 19,'Listgreinar, efra þrep'],
+                    ['b', 3, 19,'Listgreinar, neðra þrep'],
+                    ['c', 3, 12,'Listgreinar, efra þrep'],
+                    ['d', 3, 24,'Félagsgreinar, efra þrep'],
+      ]
+      var hlutfoll = [100,100,100,100];
+      var kennari = new Kennari('Gréta',afangar,hlutfoll);
+      var vm = kennari.vinnumatAfanga();
+      expect(Math.abs(vm[0]-189.4)).toBeLessThan(0.5);
+      expect(Math.abs(vm[1]-187)).toBeLessThan(0.5);
+      expect(Math.abs(vm[2]-168.04)).toBeLessThan(0.5);
+      expect(Math.abs(vm[3]-186.2)).toBeLessThan(0.5);
+    });
+  });
+    /*
+  * Test 31: 
+  */
+   describe('Rétt vinnumat fagbóklegs kennara', function() {
+    it("Guðrún K.", function() {
+      var afangar = [['a', 3, 3,'Fagbóklegt'],
+                     ['b', 3, 3,'Fagbóklegt'],
+                     ['c', 3, 15,'Fagbóklegt']
+      ];
+      var hlutfoll = [100,100,100];
+      var kennari = new Kennari('Guðrún K.',afangar,hlutfoll);
+      var vm = kennari.vinnumatAfanga();
+      expect(Math.abs(vm[0]-161.2)).toBeLessThan(0.5);
+      expect(Math.abs(vm[1]-161.2)).toBeLessThan(0.5);
+      expect(Math.abs(vm[2]-174.55)).toBeLessThan(0.5);
+    });
+  });
+  /*
+  * Test 32: 
+  */
+   describe('Rétt vinnumat félagsgreina kennara', function() {
+    it("Hannes Ísberg", function() {
+      var afangar = [['a', 3, 22,'Félagsgreinar, neðra þrep'],
+                     ['b', 3, 25,'Félagsgreinar, efra þrep'],
+                     ['c', 3, 20,'Félagsgreinar, efra þrep']
+      ];
+      var hlutfoll = [100,100,100,100]
+      var kennari = new Kennari('Hannes',afangar,hlutfoll)
+      var vm = kennari.vinnumatAfanga();
+      expect(Math.abs(vm[0]-175)).toBeLessThan(0.5);
+      expect(Math.abs(vm[1]-188.9)).toBeLessThan(0.5);
+      expect(Math.abs(vm[2]-175.4)).toBeLessThan(0.5);
+    });
+  });
+/*
+  * Test 33: 
+  */
+   describe('Rétt vinnumat íslenskukennara', function() {
+    it("Helgi Sæm.", function() {
+      var afangar = [['a', 3, 21,'Erlend mál, neðra þrep'],
+                    ['b', 3, 31,'Íslenska, efra þrep'],
+                    ['c', 3, 21,'Íslenska, efra þrep']
+      ];
+
+      var hlutfoll = [100,100,100];
+      var kennari = new Kennari('Helgi Sæm.',afangar,hlutfoll);
+      var vm = kennari.vinnumatAfanga();
+      expect(Math.abs(vm[0]-172.5)).toBeLessThan(0.5);
+      expect(Math.abs(vm[1]-211.4)).toBeLessThan(0.5);
+      expect(Math.abs(vm[2]-180.98)).toBeLessThan(0.5);
+    });
+  });
+    /*
+  * Test 35: 
+  */
+   describe('Rétt vinnumat stærðfræðikennara', function() {
+    it("Jónína", function() {
+      var afangar = [['a', 3, 20,'Stærðfræði, efra þrep'],
+                     ['b', 3, 26,'Almenn braut'],
+                     ['c', 3, 24,'Stærðfræði, efra þrep'],
+                     ['d', 3, 21,'Stærðfræði, efra þrep'],
+                     ['e', 3, 30,'Stærðfræði, neðra þrep']
+      ];
+      var hlutfoll = [100,100,100,100,100];
+      var kennari = new Kennari('Jónína',afangar,hlutfoll);
+      expect(Math.abs(kennari.originalAfangar[0].vinnumat()-169.34)).toBeLessThan(0.5);
+      expect(Math.abs(kennari.originalAfangar[2].vinnumat()-180.02)).toBeLessThan(0.5);
+      expect(Math.abs(kennari.originalAfangar[3].vinnumat()-172.01)).toBeLessThan(0.5);
+      expect(Math.abs(kennari.originalAfangar[4].vinnumat()-192)).toBeLessThan(0.5);
+    });
+  });
+  /*
+  * Test 39: 
+  */
+   describe('Frönskukennari rétt vinnumat', function() {
+    it("Ingunn", function() {
+      var afangar = [['a', 3, 20,'Erlend mál, neðra þrep'],
+                     ['b', 3, 17,'Erlend mál, neðra þrep'],
+                     ['c', 3, 14,'Erlend mál, neðra þrep'],
+                     ['d', 3, 10,'Erlend mál, efra þrep'],
+                     ['e', 3, 11,'Erlend mál, efra þrep']
+      ];
+      var hlutfoll = [100,100,100,100,100];
+      var kennari = new Kennari('Ingunn',afangar,hlutfoll);
+      var vm = kennari.vinnumatAfanga();
+      expect(Math.abs(vm[0]-170)).toBeLessThan(0.5);
+      expect(Math.abs(vm[1]-162.5)).toBeLessThan(0.5);
+      expect(Math.abs(vm[2]-162.5)).toBeLessThan(0.5);
+      expect(Math.abs(vm[3]-167.3)).toBeLessThan(0.5);
+      expect(Math.abs(vm[4]-167.3)).toBeLessThan(0.5);
+    });
+  });
 }());
