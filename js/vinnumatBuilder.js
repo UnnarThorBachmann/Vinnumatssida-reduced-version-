@@ -1859,6 +1859,7 @@ var octopus = {
       return output;
     },
     parseNumberField: function(n) {
+      n = n.replace(',','.');
       return (isNaN(n) || n.length === 0 || !n)? 0:parseFloat(n);
     },
     createKennari: function(afangar,hlutfoll) {
@@ -2069,8 +2070,8 @@ var view = {
     for (var i=1; i <= afangar.fjoldi; i++) {
         var heiti = document.getElementById('h-'+i).value;
         if (heiti != '') {
-           var einingar = document.getElementById('e-'+i).value;
-           var fjoldi = document.getElementById('f-'+i).value;
+           var einingar = octopus.parseNumberField(document.getElementById('e-'+i).value);
+           var fjoldi = octopus.parseNumberField(document.getElementById('f-'+i).value);
            var synid = document.getElementById('s-'+i).value;
            var hlutf =  octopus.parseNumberField(document.getElementById('p-'+i).value);
            var param = [heiti,einingar,fjoldi,synid];
@@ -2086,7 +2087,7 @@ var view = {
      for (var j = 1; j <= afangar.fjoldi; j++) {
         var heiti = document.getElementById('h-'+ j).value;
         if (heiti != '') {
-            var vmat = vinnumat[j-1];//*parseFloat(octopus.parseNumberField(document.getElementById('p-'+j).value))/100;
+            var vmat = vinnumat[j-1];
             summa += parseFloat(vmat);
             var fjoldiNem = document.getElementById('f-'+ j).value;
             var synid = document.getElementById('s-'+ j).value;
