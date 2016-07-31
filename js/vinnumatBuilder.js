@@ -2,7 +2,26 @@
 /*
 vinnumat: Unnar Thor Bachmann.
 */
+var templateAfangiNidurst = 
+'<ul class="list-group"><li class="list-group-item"><strong><%=item.heiti%></strong></li>\
+<li class="list-group-item">Vinnumat: <%=item.vinnumat%> klst. </li>\
+<li class="list-group-item"> Einingafjöldi: <%=item.einingafjoldi%></li>\
+<li class="list-group-item">Nemendafjöldi:<%=item.nemendafjoldi%> </li>\
+<li class="list-group-item"> Sýnidæmi: <%=item.synidaemi%> </li>\
+</ul>';
 
+var templateLaunatexti = 'Áætluð mánaðarlaun miðað við fullt starf reiknast <%=item.laun%> krónur.\
+<ul class="list-group"> Þau eru summa eftirfarandi þátta:\
+<li class="list-group-item"> Orlofsuppbót: <%=item.orlof%>/12 krónur.</li>\
+<li class="list-group-item"> Desemberuppbót: <%=item.desember%>/12 krónur</li>\
+<li class="list-group-item"> Dagvinna (launaflokkur= <%=item.launaflokkur%>, þrep=<%=item.threp%>):\
+<%item.dagvinna%> krónur</li>\
+<li class="list-group-item"> Yfirvinna: Fjöldi yfirvinnutíma\
+sinnum 1,0385% af dagvinnu (dreift á 6 mánuði)\
+<br><%=item.yfirvinnutimar%>\
+&middot 0,010385 &middot <%=item.launatafla%>\
+/6 = <%=item.yfirvinna%>krónur</li>\
+</ul>';
 var desemberuppbot = {
     '2013': 52100,
     '2014': 52100,
@@ -2082,23 +2101,23 @@ var view = {
     octopus.createKennari(af,hlutfoll);
      $('.hidden').removeClass('hidden');
      $('.visiblenon').removeClass('visiblenon');
+     _.templateSettings.variable = "item";
      var vinnumat = octopus.vinnumat();
      var summa = parseFloat(0);
      for (var j = 1; j <= afangar.fjoldi; j++) {
         var heiti = document.getElementById('h-'+ j).value;
         if (heiti != '') {
-            var vmat = vinnumat[j-1];
-            summa += parseFloat(vmat);
-            var fjoldiNem = document.getElementById('f-'+ j).value;
-            var synid = document.getElementById('s-'+ j).value;
-            var en = document.getElementById('e-'+ j).value;
-            document.getElementById('v-'+j).innerHTML =  
-            '<ul class="list-group"><li class="list-group-item"><strong>' + heiti +'</strong></li>'
-            + '<li class="list-group-item">Vinnumat: ' + octopus.parseOutput(vmat,100) + ' klst. </li>'
-            + '<li class="list-group-item"> Einingafjöldi: '   + en + '</li>'
-            + '<li class="list-group-item">Nemendafjöldi: '+fjoldiNem + '</li>'
-            + '<li class="list-group-item"> Sýnidæmi: '   + synid + '</li>'
-            + '</ul>'
+            summa += parseFloat(vinnumat[j-1]);
+            var template = _.template(
+              templateAfangiNidurst
+            );
+            document.getElementById('v-'+j).innerHTML = template({
+              heiti: heiti,
+              vinnumat: octopus.parseOutput(vinnumat[j-1],100),
+              einingafjoldi: document.getElementById('e-'+ j).value,
+              nemendafjoldi: document.getElementById('f-'+ j).value,
+              synidaemi: document.getElementById('s-'+ j).value
+            }); 
         }
         else {
           document.getElementById('v-'+j).innerHTML = "Ekkert vinnumat fyrir hóp " + j + '.';
@@ -2114,20 +2133,13 @@ var view = {
      document.getElementById('dagsskoli').value = octopus.parseOutput(summa,10);
      document.getElementById('A-hluti').value = octopus.parseOutput(summa - vinnuskylda,10);
      document.getElementById('skerding').value = octopus.parseOutput(octopus.skerding,10);
-
-    
     var launaflokkur = document.getElementById("launaflokkur").value;
     var threp = document.getElementById("threp").value;
  
     var yfirvinnaNyja = summa-vinnuskylda;
     var ls = octopus.launKennari(launaflokkur,threp,yfirvinnaNyja);
     document.getElementById("manadarlaun").value = ls.toFixed(3);
-    var launatexti = 'Áætluð mánaðarlaun miðað við fullt starf reiknast ' + (ls).toFixed(3) + ' krónur.';
-    launatexti += '<ul class="list-group"> Þau eru summa eftirfarandi þátta:';
-    launatexti += '<li class="list-group-item"> Orlofsuppbót: '+ (octopus.orlof('2016')/1000).toFixed(3) +'/12 krónur.</li>';
-    launatexti += '<li class="list-group-item"> Desemberuppbót: '+ (octopus.desember('2016')/1000).toFixed(3) +'/12 krónur</li>';
-    launatexti += '<li class="list-group-item"> Dagvinna (launaflokkur= '+launaflokkur+', þrep= '+ threp+'): '
-    launatexti += (octopus.dagvinna(launaflokkur,threp)/1000).toFixed(3)+' krónur</li>';
+    _.templateSettings.variable = "item";
     var yfirvinnaBirta;
     if (yfirvinnaNyja < 0) {
         yfirvinnaBirta = 0;
@@ -2135,14 +2147,22 @@ var view = {
     else {
         yfirvinnaBirta = yfirvinnaNyja;
     }
-    launatexti += '<li class="list-group-item"> Yfirvinna: Fjöldi yfirvinnutíma '
-               + 'sinnum 1,0385% af dagvinnu (dreift á 6 mánuði)'
-               + '<br>'
-               + octopus.parseOutput(yfirvinnaBirta,10)
-               + '&middot 0,010385 &middot'+(launatafla01012016[launaflokkur][threp]/1000).toFixed(3)
-               + '/6 = '+ (yfirvinnaBirta*0.010385*launatafla01012016[launaflokkur][threp].toFixed(0)/6) +' krónur</li>';
-    launatexti+= '</ul>'
-    document.getElementById("manadarlaunTexti").innerHTML = launatexti;
+    var template = _.template(
+      templateLaunatexti
+    );
+    
+    document.getElementById("manadarlaunTexti").innerHTML = 
+    template({
+              laun: ls.toFixed(3),
+              orlof: (octopus.orlof('2016')/1000).toFixed(3),
+              desember: (octopus.desember('2016')/1000).toFixed(3),
+              launaflokkur: launaflokkur,
+              threp: threp,
+              dagvinna: (octopus.dagvinna(launaflokkur,threp)/1000).toFixed(3),
+              yfirvinnutimar: octopus.parseOutput(yfirvinnaBirta,10),
+              launatafla: (launatafla01012016[launaflokkur][threp]/1000).toFixed(3),
+              yfirvinna: (yfirvinnaBirta*0.010385*launatafla01012016[launaflokkur][threp].toFixed(0)/6)
+    }); 
      
     var comp = function (a,b) {
       if ((a.heildarvinnumat()) === (b.heildarvinnumat())) {
