@@ -508,7 +508,7 @@ $(function() {
     });
   });
   /*
-  * Test 22: Testing if Raungreinar, neðra þrep taxt is correct for
+  * Test 23: Testing if Raungreinar, neðra þrep taxt is correct for
   * three units and 5, 17, 25, 28, 30, 32 students.
   */
    describe('Rétt vinnumat (5, 15, 22, 26 og 28 nemendur)', function() {
@@ -528,7 +528,7 @@ $(function() {
     });
   });
   /*
-  * Test 23: Testing if Raungreinar, efra þrep taxt is correct for
+  * Test 24: Testing if Raungreinar, efra þrep taxt is correct for
   * three units and 5, 17, 25, 28, 30, 32 students.
   */
    describe('Rétt vinnumat (5, 15, 22, 26 og 28 nemendur)', function() {
@@ -548,7 +548,7 @@ $(function() {
     });
   });
   /*
-  * Test 24: Testing if Raungreinar, efra þrep taxt is correct for
+  * Test 25: Testing if Raungreinar, efra þrep taxt is correct for
   * three units and 5, 12, 18, 22 and 24 students.
   */
    describe('Rétt vinnumat (5, 12, 18, 22 og 24 nemendur)', function() {
@@ -568,10 +568,32 @@ $(function() {
     });
   });
   /*
-  * Test 25: 
+  * Test 26: 
   */
    describe('Rétt vinnumat íslenskukennara', function() {
     it("Ársæll", function() {
+      document.getElementById('h-1').value = 'Ísl 103';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '23'
+      document.getElementById('s-1').value = 'Íslenska, neðra þrep'
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'Ísl 193';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '17';
+      document.getElementById('s-2').value = 'Almenn braut'
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'Ísl 203';   
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '28';
+      document.getElementById('s-3').value = 'Íslenska, efra þrep'
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'Ísl 403';   
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '19';
+      document.getElementById('s-4').value = 'Íslenska, efra þrep'
+      document.getElementById('p-4').value = '100';
+      document.getElementById('golf').value = '60 ára+';
+      document.getElementById('calculate').click();
       var afangar = [['Ísl 103', 3, 23,'Íslenska, neðra þrep'],
                     ['Ísl 193', 3, 17,'Almenn braut'],
                     ['Ísl 203', 3, 28,'Íslenska, efra þrep'],
@@ -580,18 +602,43 @@ $(function() {
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Ársæll', afangar, hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      ).toBe(parseFloat(document.getElementById('dagsskoli').value));
       expect(Math.abs(vm[0]-182.32)).toBeLessThan(0.1);
-      //expect(Math.abs(vm[1]-178.89)).toBeLessThan(0.1);
       expect(Math.abs(vm[2]-199.67)).toBeLessThan(0.1);
       expect(Math.abs(vm[3]-175.64)).toBeLessThan(0.1);
-
     });
   });
   /*
-  * Test 26: 
+  * Test 27: 
   */
    describe('Rétt vinnumat félagsfræðikennara', function() {
     it("Aðalbjörg", function() {
+      document.getElementById('h-1').value = 'HBF 103';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '19';
+      document.getElementById('s-1').value = 'Félagsgreinar, neðra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'SAS 103';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '15';
+      document.getElementById('s-2').value = 'Félagsgreinar, neðra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'SAS 103';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '16';
+      document.getElementById('s-3').value = 'Félagsgreinar, neðra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
+      
       var afangar = [['HBF 103', 3, 19,'Félagsgreinar, neðra þrep'],
                     ['Sas 103', 3, 15,'Félagsgreinar, neðra þrep'],
                     ['Sas 103', 3, 16,'Félagsgreinar, neðra þrep']
@@ -599,18 +646,54 @@ $(function() {
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Aðalbjörg', afangar, hlutfoll);
       var vm = kennari.vinnumatAfanga();
-      
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-167.5)).toBeLessThan(0.1);
       expect(Math.abs(vm[1]-154.375)).toBeLessThan(0.1);
       expect(Math.abs(vm[2]-154.375)).toBeLessThan(0.1);
-
     });
   });
-/*
-  * Test 27: 
+  /*
+  * Test 28: 
   */
    describe('Rétt vinnumat sögukennara', function() {
     it("Arngrímur (óskertur)", function() {
+      document.getElementById('h-1').value = 'saga 203';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '30';
+      document.getElementById('s-1').value = 'Félagsgreinar, efra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'Saga 193';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '15'
+      document.getElementById('s-2').value = 'Almenn braut';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'saga 203';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '22';
+      document.getElementById('s-3').value = 'Félagsgreinar, efra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'saga 303';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '20';
+      document.getElementById('s-4').value = 'Félagsgreinar, efra þrep';
+      document.getElementById('p-4').value = '50';
+      document.getElementById('add').click();
+      document.getElementById('h-5').value = 'saga 303';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '26';
+      document.getElementById('s-5').value = 'Félagsgreinar, efra þrep';
+      document.getElementById('p-5').value = '50';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
+
       var afangar = [['saga203', 3, 30,'Félagsgreinar, efra þrep'],
                     ['saga193', 3, 15,'Almenn braut'],
                     ['saga203', 3, 22,'Félagsgreinar, efra þrep'],
@@ -622,18 +705,49 @@ $(function() {
       var kennari = new Kennari('Arngrímur', afangar, hlutfoll);
       var vm = kennari.vinnumatAfanga();
       var skerding = kennari.ryrnunAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-193.5)).toBeLessThan(0.3);
       expect(Math.abs(vm[1]-174.5)).toBeLessThan(0.3);
       expect(Math.abs(vm[2]-171.3)).toBeLessThan(0.3);
-      //expect(Math.abs(vm[3]-84.1)).toBeLessThan(0.1);
-      //expect(Math.abs(vm[4]-93)).toBeLessThan(0.1);
+      expect(Math.abs(vm[3]-83.0675)).toBeLessThan(0.1);
+      expect(Math.abs(vm[4]-91.0675)).toBeLessThan(0.1);
     });
   });
-/*
-  * Test 28: 
+  /*
+  * Test 29: 
   */
    describe('Rétt vinnumat stærð/raun kennara', function() {
     it("Unnar (óskertur)", function() {
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '15';
+      document.getElementById('s-1').value = 'Raungreinar, efra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '15';
+      document.getElementById('s-2').value = 'Stærðfræði, efra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '25';
+      document.getElementById('s-3').value = 'Stærðfræði, efra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'd';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '11';
+      document.getElementById('s-4').value = 'Stærðfræði, efra þrep';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('golf').value = '30-37 ára';
+      document.getElementById('calculate').click();
       var afangar = [['a', 3, 15,'Raungreinar, efra þrep'],
                     ['b', 3, 15,'Stærðfræði, efra þrep'],
                     ['c', 3, 25,'Stærðfræði, efra þrep'],
@@ -642,6 +756,15 @@ $(function() {
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Unnar',afangar, hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-165.55)).toBeLessThan(0.1);
       expect(Math.abs(vm[1]-161.39)).toBeLessThan(0.1);
       expect(Math.abs(vm[2]-182.75)).toBeLessThan(0.1);
@@ -649,29 +772,77 @@ $(function() {
     });
   });
   /*
-  * Test 29: 
+  * Test 30: 
   */
    describe('Rétt vinnumat listgreinakennara', function() {
     it("Gréta", function() {
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '15';
+      document.getElementById('s-1').value = 'Listgreinar, efra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '19';
+      document.getElementById('s-2').value = 'Listgreinar, efra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '12';
+      document.getElementById('s-3').value = 'Listgreinar, efra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'd';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '24';
+      document.getElementById('s-4').value = 'Félagsgreinar, efra þrep';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('golf').value = '55-59 ára';
+      document.getElementById('calculate').click();
       var afangar = [['a', 3, 19,'Listgreinar, efra þrep'],
                     ['b', 3, 19,'Listgreinar, neðra þrep'],
                     ['c', 3, 12,'Listgreinar, efra þrep'],
                     ['d', 3, 24,'Félagsgreinar, efra þrep'],
-      ]
+      ];
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Gréta',afangar,hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-189.4)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-187)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-168.04)).toBeLessThan(0.5);
       expect(Math.abs(vm[3]-186.2)).toBeLessThan(0.5);
     });
   });
-    /*
+  /*
   * Test 31: 
   */
    describe('Rétt vinnumat fagbóklegs kennara', function() {
     it("Guðrún K.", function() {
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '3';
+      document.getElementById('s-1').value = 'Fagbóklegt';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '3';
+      document.getElementById('s-2').value = 'Fagbóklegt';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '15';
+      document.getElementById('s-3').value = 'Fagbóklegt';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
       var afangar = [['a', 3, 3,'Fagbóklegt'],
                      ['b', 3, 3,'Fagbóklegt'],
                      ['c', 3, 15,'Fagbóklegt']
@@ -679,6 +850,15 @@ $(function() {
       var hlutfoll = [100,100,100];
       var kennari = new Kennari('Guðrún K.',afangar,hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-161.2)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-161.2)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-174.55)).toBeLessThan(0.5);
@@ -689,6 +869,23 @@ $(function() {
   */
    describe('Rétt vinnumat félagsgreina kennara', function() {
     it("Hannes Ísberg", function() {
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '22';
+      document.getElementById('s-1').value = 'Félagsgreinar, neðra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '25';
+      document.getElementById('s-2').value = 'Félagsgreinar, efra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '20';
+      document.getElementById('s-3').value = 'Félagsgreinar, efra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('golf').value = '60 ára+';
+      document.getElementById('calculate').click();
       var afangar = [['a', 3, 22,'Félagsgreinar, neðra þrep'],
                      ['b', 3, 25,'Félagsgreinar, efra þrep'],
                      ['c', 3, 20,'Félagsgreinar, efra þrep']
@@ -696,16 +893,42 @@ $(function() {
       var hlutfoll = [100,100,100,100]
       var kennari = new Kennari('Hannes',afangar,hlutfoll)
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-175)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-188.9)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-175.4)).toBeLessThan(0.5);
     });
   });
-/*
+  /*
   * Test 33: 
   */
    describe('Rétt vinnumat íslenskukennara', function() {
     it("Helgi Sæm.", function() {
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '21';
+      document.getElementById('s-1').value = 'Erlend mál, neðra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '31';
+      document.getElementById('s-2').value = 'Íslenska, efra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '21';
+      document.getElementById('s-3').value = 'Íslenska, efra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('golf').value = '60 ára+';
+      document.getElementById('calculate').click();
       var afangar = [['a', 3, 21,'Erlend mál, neðra þrep'],
                     ['b', 3, 31,'Íslenska, efra þrep'],
                     ['c', 3, 21,'Íslenska, efra þrep']
@@ -714,16 +937,53 @@ $(function() {
       var hlutfoll = [100,100,100];
       var kennari = new Kennari('Helgi Sæm.',afangar,hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-172.5)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-211.4)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-180.98)).toBeLessThan(0.5);
     });
   });
     /*
-  * Test 35: 
+  * Test 34: 
   */
    describe('Rétt vinnumat stærðfræðikennara', function() {
     it("Jónína", function() {
+      document.getElementById('h-1').value = 'saga 203';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '20';
+      document.getElementById('s-1').value = 'Stærðfræði, efra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'Saga 193';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '26'
+      document.getElementById('s-2').value = 'Almenn braut';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'saga 203';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '24';
+      document.getElementById('s-3').value = 'Stærðfræði, efra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'saga 303';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '21';
+      document.getElementById('s-4').value = 'Stærðfræði, efra þrep';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('add').click();
+      document.getElementById('h-5').value = 'saga 303';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '30';
+      document.getElementById('s-5').value = 'Stærðfræði, neðra þrep';
+      document.getElementById('p-5').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
       var afangar = [['a', 3, 20,'Stærðfræði, efra þrep'],
                      ['b', 3, 26,'Almenn braut'],
                      ['c', 3, 24,'Stærðfræði, efra þrep'],
@@ -732,6 +992,15 @@ $(function() {
       ];
       var hlutfoll = [100,100,100,100,100];
       var kennari = new Kennari('Jónína',afangar,hlutfoll);
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(kennari.originalAfangar[0].vinnumat()-169.34)).toBeLessThan(0.5);
       expect(Math.abs(kennari.originalAfangar[2].vinnumat()-180.02)).toBeLessThan(0.5);
       expect(Math.abs(kennari.originalAfangar[3].vinnumat()-172.01)).toBeLessThan(0.5);
@@ -739,10 +1008,38 @@ $(function() {
     });
   });
   /*
-  * Test 39: 
+  * Test 35: 
   */
    describe('Frönskukennari rétt vinnumat', function() {
     it("Ingunn", function() {
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '20';
+      document.getElementById('s-1').value = 'Erlend mál, neðra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '17'
+      document.getElementById('s-2').value = 'Erlend mál, neðra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '14';
+      document.getElementById('s-3').value = 'Erlend mál, neðra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'd';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '10';
+      document.getElementById('s-4').value = 'Erlend mál, efra þrep';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('add').click();
+      document.getElementById('h-5').value = 'e';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '11';
+      document.getElementById('s-5').value = 'Erlend mál, efra þrep';
+      document.getElementById('p-5').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
       var afangar = [['a', 3, 20,'Erlend mál, neðra þrep'],
                      ['b', 3, 17,'Erlend mál, neðra þrep'],
                      ['c', 3, 14,'Erlend mál, neðra þrep'],
@@ -752,6 +1049,15 @@ $(function() {
       var hlutfoll = [100,100,100,100,100];
       var kennari = new Kennari('Ingunn',afangar,hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-170)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-162.5)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-162.5)).toBeLessThan(0.5);
@@ -759,12 +1065,40 @@ $(function() {
       expect(Math.abs(vm[4]-167.3)).toBeLessThan(0.5);
     });
   });
-/*
-  * Test 30: 
+  /*
+  * Test 36: 
   */
    describe('Rétt vinnumat raungreinakennara', function() {
     it("Guðrún Ingibjörg", function() {
-      var afangar = [['efn 103', 3, 17,'Raungreinar, efra þrep'],
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '17';
+      document.getElementById('s-1').value = 'Raungreinar, efra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'a';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '19'
+      document.getElementById('s-2').value = 'Raungreinar, efra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'b';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '26';
+      document.getElementById('s-3').value = 'Almennar raungreinar';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'b';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '31';
+      document.getElementById('s-4').value = 'Almennar raungreinar';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('h-5').value = '';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '';
+      document.getElementById('s-5').value = '';
+      document.getElementById('p-5').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
+      var afangar = [
+        ['efn 103', 3, 17,'Raungreinar, efra þrep'],
         ['efn 203', 3, 19,'Raungreinar, efra þrep'],
         ['nær 103', 3, 26,'Almennar raungreinar'],
         ['nær 103', 3, 31,'Almennar raungreinar']
@@ -772,6 +1106,15 @@ $(function() {
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Guðrún Ingibjörg',afangar,hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-170.84)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-176.18)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-171.6)).toBeLessThan(0.5);
@@ -779,11 +1122,39 @@ $(function() {
     });
   });
  /*
-  * Test 34: 
+  * Test 37: 
   */
    describe('Rétt vinnumat enskukennara (þrískert)', function() {
     it("Herdís", function() {
-      var afangar = [['a', 3, 21,'Erlend mál, efra þrep'],
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '21';
+      document.getElementById('s-1').value = 'Erlend mál, efra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'a';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '22'
+      document.getElementById('s-2').value = 'Erlend mál, efra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'b';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '17';
+      document.getElementById('s-3').value = 'Erlend mál, neðra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'a';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '21';
+      document.getElementById('s-4').value = 'Erlend mál, efra þrep';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('h-5').value = '';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '';
+      document.getElementById('s-5').value = '';
+      document.getElementById('p-5').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
+      var afangar = [
+        ['a', 3, 21,'Erlend mál, efra þrep'],
         ['a', 3, 22,'Erlend mál, efra þrep'],
         ['c', 3, 17,'Erlend mál, neðra þrep'],
         ['a', 3, 21,'Erlend mál, efra þrep']
@@ -791,6 +1162,15 @@ $(function() {
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Herdís',afangar,hlutfoll)
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-167.0)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-169.7)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-162.5)).toBeLessThan(0.5);
@@ -798,11 +1178,39 @@ $(function() {
     });
   });
   /*
-  * Test 36: 
+  * Test 38: 
   */
    describe('Rétt vinnumat raungreinakennara', function() {
     it("Líney", function() {
-      var afangar = [['a', 3, 19,'Raungreinar, neðra þrep'],
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '19';
+      document.getElementById('s-1').value = 'Raungreinar, neðra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '20'
+      document.getElementById('s-2').value = 'Raungreinar, neðra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '19';
+      document.getElementById('s-3').value = 'Almennar raungreinar';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'c';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '21';
+      document.getElementById('s-4').value = 'Almennar raungreinar';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('h-5').value = '';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '';
+      document.getElementById('s-5').value = '';
+      document.getElementById('p-5').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
+      var afangar = [
+        ['a', 3, 19,'Raungreinar, neðra þrep'],
         ['b', 3, 20,'Raungreinar, neðra þrep'],
         ['c', 3, 19,'Almennar raungreinar'],
         ['c', 3, 21,'Almennar raungreinar']
@@ -810,6 +1218,15 @@ $(function() {
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Líney',afangar,hlutfoll)
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-171)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-173.5)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-155.2)).toBeLessThan(0.5);
@@ -817,18 +1234,55 @@ $(function() {
     });
   });
   /*
-  * Test 37: 
+  * Test 39: 
   */
    describe('Rétt vinnumat íslenskukennara', function() {
     it("Vala", function() {
-      var afangar = [['a', 3, 20,'Íslenska, efra þrep'],
-                     ['b', 3, 25,'Íslenska, efra þrep'],
-                     ['c', 3, 22,'Íslenska, neðra þrep'],
-                     ['a', 3, 15,'Íslenska, efra þrep']
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '20';
+      document.getElementById('s-1').value = 'Íslenska, efra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '25'
+      document.getElementById('s-2').value = 'Íslenska, efra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '22';
+      document.getElementById('s-3').value = 'Íslenska, neðra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'a';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '15';
+      document.getElementById('s-4').value = 'Íslenska, efra þrep';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('h-5').value = '';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '';
+      document.getElementById('s-5').value = '';
+      document.getElementById('p-5').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
+      var afangar = [
+        ['a', 3, 20,'Íslenska, efra þrep'],
+        ['b', 3, 25,'Íslenska, efra þrep'],
+        ['c', 3, 22,'Íslenska, neðra þrep'],
+        ['a', 3, 15,'Íslenska, efra þrep']
       ];
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Vala',afangar,hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-169.715)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-191.66)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-179.65)).toBeLessThan(0.5);
@@ -836,11 +1290,39 @@ $(function() {
     });
   });
   /*
-  * Test 38: 
+  * Test 40: 
   */
    describe('Kennari í heilbrigðisskóli', function() {
     it("Inga", function() {
-      var afangar = [['a', 3, 16,'Almennar raungreinar'],
+      document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '16';
+      document.getElementById('s-1').value = 'Almennar raungreinar';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '17'
+      document.getElementById('s-2').value = 'Fagbóklegt';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '12';
+      document.getElementById('s-3').value = 'Verklegt';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'a';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '26';
+      document.getElementById('s-4').value = 'Almennar raungreinar';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('h-5').value = 'c';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '12';
+      document.getElementById('s-5').value = 'Verklegt';
+      document.getElementById('p-5').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
+      var afangar = [
+        ['a', 3, 16,'Almennar raungreinar'],
         ['b', 3, 17,'Fagbóklegt'],
         ['c', 3, 12,'Verklegt'],
         ['a', 3, 26,'Almennar raungreinar'],
@@ -849,6 +1331,15 @@ $(function() {
       var hlutfoll = [100,100,100,100,100];
       var kennari = new Kennari('Inga',afangar,hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-150.075)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-179.89)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-165.775)).toBeLessThan(0.5);
@@ -858,11 +1349,39 @@ $(function() {
     });
   });
   /*
-  * Test 40: 
+  * Test 41: 
   */
    describe('Spænskukennari rétt vinnumat', function() {
     it("Carmen", function() {
-      var afangar = [['a', 3, 17,'Erlend mál, neðra þrep'],
+            document.getElementById('h-1').value = 'a';
+      document.getElementById('e-1').value = '3';
+      document.getElementById('f-1').value = '17';
+      document.getElementById('s-1').value = 'Erlend mál, neðra þrep';
+      document.getElementById('p-1').value = '100';
+      document.getElementById('h-2').value = 'b';
+      document.getElementById('e-2').value = '3';
+      document.getElementById('f-2').value = '25'
+      document.getElementById('s-2').value = 'Erlend mál, neðra þrep';
+      document.getElementById('p-2').value = '100';
+      document.getElementById('h-3').value = 'c';
+      document.getElementById('e-3').value = '3';
+      document.getElementById('f-3').value = '6';
+      document.getElementById('s-3').value = 'Erlend mál, efra þrep';
+      document.getElementById('p-3').value = '100';
+      document.getElementById('h-4').value = 'a';
+      document.getElementById('e-4').value = '3';
+      document.getElementById('f-4').value = '19';
+      document.getElementById('s-4').value = 'Erlend mál, neðra þrep';
+      document.getElementById('p-4').value = '100';
+      document.getElementById('h-5').value = '';
+      document.getElementById('e-5').value = '3';
+      document.getElementById('f-5').value = '';
+      document.getElementById('s-5').value = '';
+      document.getElementById('p-5').value = '100';
+      document.getElementById('golf').value = '38-54 ára';
+      document.getElementById('calculate').click();
+      var afangar = [
+        ['a', 3, 17,'Erlend mál, neðra þrep'],
         ['b', 3, 25,'Erlend mál, neðra þrep'],
         ['c', 3, 6,'Erlend mál, efra þrep'],
         ['a', 3, 19,'Erlend mál, neðra þrep'],
@@ -870,6 +1389,15 @@ $(function() {
       var hlutfoll = [100,100,100,100];
       var kennari = new Kennari('Carmen',afangar,hlutfoll);
       var vm = kennari.vinnumatAfanga();
+      expect(kennari.vinnuskylda(
+        document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)).toBe(
+        parseInt(document.getElementById('vinnuskylda').value));
+      expect(Math.abs(kennari.vinnuskylda(document.getElementById('onnurVinna').value,
+        document.getElementById('golf').value)+
+        parseFloat(document.getElementById('onnurVinna').value)+
+        parseFloat(document.getElementById('A-hluti').value)
+      -parseFloat(document.getElementById('dagsskoli').value))).toBeLessThan(1.01);
       expect(Math.abs(vm[0]-154.25)).toBeLessThan(0.5);
       expect(Math.abs(vm[1]-182.5)).toBeLessThan(0.5);
       expect(Math.abs(vm[2]-167.3)).toBeLessThan(0.5);
@@ -877,7 +1405,7 @@ $(function() {
     });
   });
   /*
-  * Test 41: 
+  * Test 42: 
   */
    describe('Þýskukennari rétt vinnumat', function() {
     it("Steinunn", function() {
@@ -895,4 +1423,5 @@ $(function() {
       expect(Math.abs(vm[3]-154.3)).toBeLessThan(0.5);
     });
   });
+
 }());
