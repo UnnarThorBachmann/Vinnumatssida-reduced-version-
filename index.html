@@ -4,11 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vinnumat</title>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" type="text/css">
+  <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" type="text/css">-->
+  
   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <!--
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>-->
   <style type="text/css" media="screen">
 
     body {
@@ -57,9 +63,13 @@
         visibility:hidden;
        }
        .container-fluid{
-        #333d51;
-        padding-left: 0px;
-        padding-right: 0px;
+        color: #fff;
+        padding-left: 0%;
+        padding-right: 0%;
+        width: 100%;
+       }
+       .navbar-fixed-top {
+        border-width: 0px;
        }
        .modal-dialog {
         background-color: #f4f3ea;
@@ -83,6 +93,10 @@
         border-color: #f4f3ea;
         background-image: none;
        }
+       .navbar-inverse {
+        background-image: none;
+        background-color: #f4f3ea;
+       }
         #myNavbar{
         background-color: #333d51;
         border-bottom-color: #333d51;
@@ -90,7 +104,7 @@
         border-left-color: #333d51;
         border-right-color: #333d51;
         color: #333d51;
-        
+
        }
        /* navbar */
        .navbar-default {
@@ -179,12 +193,18 @@
          border-right-color: #333d51;
          border-bottom-color: #333d51;
          border-left-color: #333d51;
+         margin-left: 30px;
        }
        .navbar-toggle {
-        background-color: #cbd0d8;
+        background-color: #d3ac2b;
+        float: left;
+      }
+      
+      .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+        background-color: #d3ac2b;
       }
       button.navbar-toggle.collapsed {
-        background-color: #f4f3ea;
+        background-color: #d3ac2b;
       }
        .navbar-inverse .navbar-toggle .icon-bar {
          background-color: #f4f3ea;
@@ -236,6 +256,7 @@
         flex-direction: row;
         align-items: stretch;
         padding-left:1%;
+        width: 100%;
        }
        .form-col {
         margin-right: 10px;
@@ -329,6 +350,10 @@
       .takkisla {
         margin-left:5%;
       }
+      nav {
+        padding-left: 0%;
+        padding-right: 0%;
+      }
       @media screen and (max-width: 1000px) {
         .thumbnail {
         margin-right: 10px;
@@ -345,6 +370,10 @@
         width: 90%;
         padding: 1%;
        }
+       /*
+       .container-fluid {
+          width: 80%;
+       }*/
        .feluleikur {
           display: none;
         }
@@ -362,12 +391,16 @@
        #aftastur {
         order: 10000;
        }
-       
-      }
-       @media screen and (max-width: 500px) {
-        
-       
-       
+      /*
+      @media screen and (max-width: 500px) {
+        .thumbnail {
+        margin-right: 10px;
+        margin-bottom: 5px;
+        width: 100%;
+        padding: 1%;
+       }
+      }*/
+
       }
       /*
       @media screen and (max-width: 500px) {
@@ -906,7 +939,7 @@
           Samanburður við kennara á öðrum sýnidæmum
         </h1>
         <h3 class="medium">
-          Samanburðurinn miðast við sömu forsendur og slegnar voru inn en önnur sýnidæmi. Rauðu súlurnar þýða að meðalfjöldi í hópum er kominn upp fyrir álagsmörk viðkomandi sýnidæma.
+          Samanburðurinn miðast við sömu forsendur og slegnar voru inn en önnur sýnidæmi. Rauðu súlurnar merkja það að meðalfjöldi í hópum er kominn upp fyrir álagsmörk viðkomandi sýnidæma.
         </h3>
       </div>
       <div class="flex-container hidden">
@@ -1017,15 +1050,16 @@
         </div><!-- Loka thumbnail-->
       </div><!--flex-container-->
     </div>
-  <script src="js/jquery.min.js" async></script>
+
   <script src="js/Chart.js" async></script>
-  <script src="js/bootstrap.min.js" async></script>
   <script src="js/vinnumatBuilder.js" async></script>
   <script src="js/underscore-min.js" async></script>
+  <!--
   <link rel="stylesheet" href="jasmine/lib/jasmine-2.1.2/jasmine.css">
   <script src="jasmine/lib/jasmine-2.1.2/jasmine.js"></script>
   <script src="jasmine/lib/jasmine-2.1.2/jasmine-html.js"></script>
   <script src="jasmine/lib/jasmine-2.1.2/boot.js"></script>
   <script src="jasmine/spec/vinnumat_prof.js"></script>
+  -->
   </body>
 </html>
