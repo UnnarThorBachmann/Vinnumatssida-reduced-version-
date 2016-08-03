@@ -347,12 +347,23 @@
       .einingarinput {
         max-width: 60px;
       }
+      .einingar {
+        margin-left: 5px;
+      }
       .takkisla {
-        margin-left:5%;
+        margin-left: 1%;
       }
       nav {
         padding-left: 0%;
         padding-right: 0%;
+      }
+      .vidd {
+        max-width: 150px;
+      }
+      .navbar-form .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle;
       }
       @media screen and (max-width: 1000px) {
         .thumbnail {
@@ -374,6 +385,7 @@
        .container-fluid {
           width: 80%;
        }*/
+
        .feluleikur {
           display: none;
         }
@@ -402,6 +414,12 @@
       }*/
 
       }
+      /*
+      @media screen and (max-width: 765px) {
+        br {
+          display: none;
+        }
+      }*/
       /*
       @media screen and (max-width: 500px) {
         .thumbnail {
@@ -958,8 +976,8 @@
         </h3>
       <form class="navbar-form navbar-left">
         <div class="form-group">
-          <label class="medium" for="fyrra">Sýnidæmi 1</label>
-          <select class="form-control" id="fyrra">
+          <label class="medium einingar" for="fyrra">Sýnidæmi 1</label>
+          <select class="form-control vidd" id="fyrra">
             <option>Almenn braut</option>
             <option>Almennar raungreinar</option>
             <option>Danska, efra þrep</option>
@@ -995,12 +1013,13 @@
           </select>
         </div>
         <div class="form-group">
-          <label class="medium" for="es1">Einingar </label>
+          <label class="medium einingar" for="es1">Einingar </label>
           <input type="text" class="form-control einingarinput" id="es1" value="3">
         </div>
+        <br>
         <div class="form-group">
-          <label class="medium" for="seinna">Sýnidæmi 2</label>
-          <select class="form-control" id="seinna">
+          <label class="medium einingar" for="seinna">Sýnidæmi 2</label>
+          <select class="form-control vidd" id="seinna">
             <option>Almenn braut</option>
             <option>Almennar raungreinar</option>
             <option>Danska, efra þrep</option>
@@ -1036,9 +1055,11 @@
           </select>
         </div>
         <div class="form-group">
-          <label class="medium" for="es2">Einingar </label>
+          <label class="medium einingar" for="es2">Einingar </label>
           <input type="text" class="form-control einingarinput" id="es2" value="3">
         </div>
+        <br>
+        <br>
         <button type="submit" class="btn btn-primary large takkisla" id="berasaman">Bera saman</button>
       </form>
       </div>
