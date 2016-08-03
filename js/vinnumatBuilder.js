@@ -1990,11 +1990,10 @@ var view = {
     for (var i = 0; i < fyrirsagnir.length; i++) {
       fyrirsagnir[i].addEventListener('click',function(){
         if (screen.width <= 765 
-            && !$("#skuffa").hasClass('collapsed')) {
-          $("#skuffa").click();
+            && $("#myNavbar").hasClass('in')) {
+          $('#skuffa').click();
         }
       });
-
     }
     var button1 = document.getElementById('add');
       button1.addEventListener('click',function() {
@@ -2026,11 +2025,12 @@ var view = {
     button2.addEventListener('click',function() {
       self.calc();
       button2.innerHTML = "Endurreikna";
+      /*
       if ($("#opna").hasClass('collapsed')) {
         $("#opna").click();
       }
         $('.hopen').click();
-      
+      */
       /*var values = document.getElementsByClassName('v');
       for (var i = 0; i < values.length; i++) {
         values[i].classList.remove('hidden');
