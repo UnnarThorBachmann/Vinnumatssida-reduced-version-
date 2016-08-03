@@ -1986,6 +1986,16 @@ var view = {
     return octopus.vinnuskylda(c,vinnuskyldaTexti);
   },
   init: function () {
+    var fyrirsagnir = document.getElementsByClassName('fyrirsagnir');
+    for (var i = 0; i < fyrirsagnir.length; i++) {
+      fyrirsagnir[i].addEventListener('click',function(){
+        if (screen.width <= 765 
+            && !$("#skuffa").hasClass('collapsed')) {
+          $("#skuffa").click();
+        }
+      });
+
+    }
     var button1 = document.getElementById('add');
       button1.addEventListener('click',function() {
       afangar.fjoldi += 1;
